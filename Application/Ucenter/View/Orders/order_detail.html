@@ -1,0 +1,161 @@
+<include file="Common:header_s" />
+<include file="Common:main_container_header_s" />
+
+<style>
+    .specla_background_class{
+        background:#edf3f4 !important;
+    }
+    table {
+        border:1px solid #dcebf7 !important;
+    }
+    td{color: #336199 !important;}
+    td.special_color{color:#000 !important;}
+</style>
+<div class="page-content">
+    <!--div class="page-header">
+        <h1>
+            我的用户
+            <small>
+                <i class="icon-double-angle-right"></i>
+                经纪人详细信息
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-sm-3">
+                    <h3 class="header smaller lighter blue">{$orderRs.type_n}-订单信息</h3>
+
+                    <div class="profile-user-info profile-user-info-striped">
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">用户ID</div>
+                            <div class="profile-info-value">
+                                <span class="editable" id=""><a target="_blank" href="{:U('userf/user_detail')}?user_id={$orderRs.uid}">{$orderRs.uid}</a></span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">用户昵称</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">{$orderRs.nickname}</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">建仓时间</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">{$orderRs.buy_date}</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">平仓时间</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">{$orderRs.sell_date}</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">买入/卖出价格</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">{$orderRs.buyprice}&nbsp;/&nbsp;{$orderRs.sellprice}</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">止损/止盈金额</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">{$orderRs.endprofit}&nbsp;/&nbsp;{$orderRs.endloss}</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">手续费</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">{$orderRs.fee}</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">推广佣金</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">&yen;{$orderRs.commission}</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name">保证金</div>
+
+                            <div class="profile-info-value">
+                                <span class="editable" id="">{$orderRs.Bond}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-12"></div>
+
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <h3 class="header smaller lighter blue">统计</h3>
+
+                    <table class="special_table_border table table-striped table-bordered">
+
+                        <tbody>
+                        <tr>
+                            <td class="center hidden-xs specla_background_class">
+                                结算盈亏
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="center special_color hidden-480 "><h4 class="{$orderRs.ploss_style}">{$orderRs.ploss}<h4></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+
+<include file="Common:main_container_footer" />
+<include file="Common:footer_basic_base" />
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+
+<!-- page specific plugin scripts -->
+
+<!--[if lte IE 8]>
+<script src="__PUBACE__/assets/js/excanvas.min.js"></script>
+<![endif]-->
+
+<script src="__PUBACE__/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.slimscroll.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.easy-pie-chart.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.sparkline.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.pie.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.resize.min.js"></script>
+
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function($) {
+
+    });
+</script>
+
+<include file="Common:footer_ace_base" />
+<include file="Common:footer" />

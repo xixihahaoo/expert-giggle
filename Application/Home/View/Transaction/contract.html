@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="__JS__/2.1.1jq/jquery.min.js"></script>
+    <script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+    <title>合作协议</title>
+     <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/merge.css">
+    <link rel="stylesheet" href="__CSS__/merge_product.css">
+    <style>
+        .text-link{
+            color:#0077EE;
+        }
+        .action{
+            position: fixed;
+            bottom:0;
+            width: 100%;
+            text-align: center;
+        }
+        .action a{
+            width: 100%;
+            height: .5rem;
+            line-height: .5rem;
+            vertical-align: middle;
+            font-size: .16rem;
+            color: #fff;
+            border-color: #da2f35;
+            background-color: #da2f35;
+        }
+
+    </style>
+    
+
+    <script type="text/javascript">
+        var __baseDir = 'http://'+window.location.host+'/content/';
+    </script>
+    <!--tongdun-->
+    <script type="text/javascript">
+       
+        (function () {
+
+            if (window.self == window.top) {
+                document.documentElement.style.display = 'block';
+            } else {
+                window.top.location = window.self.location;
+            }
+        })();
+    </script>
+    <!--tongdun end-->
+</head>
+<body>
+    
+<div id="doc" class="doc page-trade nofooter" data-url-signed="/agreement/signedagreement.html?commodity=RU">
+
+    <header class="page-header">
+        <div class="content">
+            <h3>签署交易合作协议</h3>
+            <div class="left">
+                <a href="javascript:window.history.back()" class="iconfont go-back icon-xiangzuojiantou"></a>
+            </div>
+            <div class="right"></div>
+        </div>
+    </header>
+
+    <!-- 签署交易合作协议 -->
+    <input type="hide" value="{$option_id}" id="option_id">
+    <section class="page-main main-agreement">
+        <div class="content">
+
+            <div class="panel">
+                <div class="content clearfix">
+                    <div>
+                        <a href="{:U('contractinfo',array('nid' => 1))}" class="text-link">《风险告知书》</a>
+                    </div>
+                    <div class="right text-lessor">未签署</div>
+                </div>
+            </div>
+            
+
+              <div class="panel">
+                <div class="content clearfix">
+                    <div>
+                        <a href="{:U('contractinfo',array('nid' => 2))}" class="text-link">《投资人与用户交易合作协议》</a>
+                    </div>
+                    <div class="right text-lessor">未签署</div>
+                </div>
+            </div>
+
+            <div class="action">
+                <a href="javascript:void(0)" class="button button-stress">我已经阅读并同意签署</a>
+            </div>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>
+<script type="text/javascript">
+     
+     $(".button").click(function(){
+          
+          var option_id = $("#option_id").val();
+          var index = layer.load(0, {
+              shade: [0.1,'#fff'] //0.1透明度的白色背景
+          });
+         $.ajax({
+
+              url:"{:U('contract')}",
+              datatype:'json',
+              type:'get',
+              data:"option_id="+option_id+" ",
+              success:function(data){
+
+                   if(data.status == 1){
+                        
+                        layer.close(index);                     
+                        layer.msg(data.msg, {icon: 6});
+                         window.location='{:U("Index/product",array("id" => $option_id))}';
+                         return false;
+                   }
+
+                   if(data.status == 0){
+                        layer.close(index);                     
+                        layer.msg(data.msg, {icon: 5});
+                         return false;
+                   }
+              }
+         });
+     });
+</script>

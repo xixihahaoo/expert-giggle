@@ -1,0 +1,131 @@
+
+<!doctype>
+<html>
+<head>
+    <include file="Common:header" />
+    <title>账户充值-{:config('s_domain_name')}{:config('webname')}</title>
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/account/account.css">
+    <link rel="stylesheet" href="__CSS__/merge/merge.css">
+
+    <script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+    <style>
+        .shadeWrap{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:99; background:rgba(0,0,0,.3); font-size:.16rem;}
+        .shadeWrap .content{ width: 75%; background: #fff; border-radius: .05rem; position: absolute; top: 50%; margin-top: -20.5%; left: 50%; margin-left: -38%; text-align: center;box-shadow: 0 0 .05rem rgba(0,0,0,.4); }
+        .shadeWrap .main{padding: .25rem; border-bottom: 1px solid #eee;}
+        .shadeWrap .action{ width:100%; height:.38rem; line-height: .38rem; border-radius: 0 0 .05rem .05rem;font-size:.16rem; color:#fff;background:#da3333;}
+    </style>
+</head>
+<body>
+<div class="wrap gray">
+    <header class="page-header">
+        <a class="back" href="javascript:window.history.back();">&nbsp;</a>
+
+        <h3>账号信息</h3>
+    </header>
+    <section class="content ">
+
+    <form method="post" id="recharge_form" action="{:U('bankPayment')}">
+        <div class="pay-money p1520 mtb10">
+            <span class="pay-title">选择银行</span>
+
+            <select id="bank" name="bank">
+				<option value="ICBC">工商银行</option>
+				<option value="ABC">农业银行</option>
+				<option value="BOC">中国银行</option>
+				<option value="CCB">建设银行</option>
+				<option value="BCOM">交通银行</option>
+				<option value="CMB">招商银行</option>
+				<option value="GDB">广东发展银行</option>
+				<option value="CITIC">中信银行</option>
+				<option value="CMBC">民生银行</option>
+				<option value="CEB">光大银行</option>
+				<option value="PABC">平安银行</option>
+				<option value="SPDB">上海浦东发展银行</option>
+				<option value="PSBC">中国邮政储蓄银行</option>
+				<option value="HXB">华夏银行</option>
+				<option value="CIB">兴业银行</option>
+            </select>
+        </div>
+
+        <input type="hidden" name="ordernum" value="{$ordernum}" id="ordernum">
+
+        <p class="login-btn" onclick="recharge_submit()">下一步</p>
+       </form>
+    </section>
+</form>
+</div>
+
+</body>
+</html>
+
+<style type="text/css">
+    .border{border: solid 1px red;}
+</style>
+
+<script type="text/javascript">
+	
+// function recharge_submit()
+// {
+// 	var index = layer.load(1, {
+// 		shade: [0.1,'#fff'] //0.1透明度的白色背景
+// 	});
+
+// 	var bank 		= $('#bank option:checked').val();
+// 	var ordernum 	=  $('#ordernum').val();
+
+// 	if(!bank)
+// 	{
+// 		layer.close(index);
+// 		layer.msg('请选择银行');
+// 		return false;
+// 	}
+
+// 	$.ajax({
+// 		url:"{:U('bankPayment')}",
+// 		dataType: 'json',
+// 		type: 'post',
+// 		data: {'bank':bank,'ordernum':ordernum},
+// 		success:function(data){
+
+// 			if(data.status === 0){
+
+// 				layer.close(index);
+// 				layer.msg(data.msg);
+// 				return false;
+// 			}
+
+// 			if(data.status === 1){
+
+// 				layer.close(index);
+// 				layer.msg(data.msg);
+// 				window.setTimeout("window.location='{:U('copyLink')}?code="+data.code+"'",1000);
+// 				return false;
+// 			}
+// 		},
+// 		error: function(request) {
+//            	console.log(request);
+//         },
+// 	});
+// }
+
+
+
+function recharge_submit()
+{
+	var index = layer.load(1, {
+		shade: [0.1,'#fff'] //0.1透明度的白色背景
+	});
+
+	var bank 		= $('#bank option:checked').val();
+
+	if(!bank)
+	{
+		layer.close(index);
+		layer.msg('请选择银行');
+		return false;
+	}
+
+	$('#recharge_form').submit();
+}
+</script>

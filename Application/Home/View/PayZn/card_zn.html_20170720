@@ -1,0 +1,193 @@
+
+<!doctype>
+<html>
+<head>
+    <include file="Common:header" />
+    <title>账户充值-{:config('s_domain_name')}{:config('webname')}</title>
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/account/account.css">
+    <link rel="stylesheet" href="__CSS__/merge/merge.css">
+
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+    <style>
+        .shadeWrap{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:99; background:rgba(0,0,0,.3); font-size:.16rem;}
+        .shadeWrap .content{ width: 75%; background: #fff; border-radius: .05rem; position: absolute; top: 50%; margin-top: -20.5%; left: 50%; margin-left: -38%; text-align: center;box-shadow: 0 0 .05rem rgba(0,0,0,.4); }
+        .shadeWrap .main{padding: .25rem; border-bottom: 1px solid #eee;}
+        .shadeWrap .action{ width:100%; height:.38rem; line-height: .38rem; border-radius: 0 0 .05rem .05rem;font-size:.16rem; color:#fff;background:#da3333;}
+    </style>
+</head>
+<body>
+<div class="wrap gray">
+    <header class="page-header">
+        <a class="back" href="javascript:window.history.back();">&nbsp;</a>
+
+        <h3>银行卡号</h3>
+    </header>
+    <section class="content ">
+        <div class="pay-money p1520 mtb10">
+            <span class="pay-title">Card No.</span><input type="text" id="j_cardNo" name="cardNo" placeholder="请输入待支付银行卡号">
+        </div>
+        <input type="hidden" value="{$zn_rs['paytype']}" name="paytype" id="paytype">
+        <input type="hidden" name="order_no" id="order_no" value="{$zn_rs['order_no']}">
+        <input type="hidden" name="amount" id="amount" value="{$zn_rs['amount']}">
+        <p class="login-btn">下一步</p>
+
+    </section>
+</div>
+<!--弹出层begin-->
+<div class="shadeWrap" style="display:none;">
+    <div class="content">
+        <div class="main">你还没有绑定银行卡</div>
+        <div class="action">
+            <span class="shadow-btn" href="javascript:void(0);">确定</span>
+        </div>
+    </div>
+</div>
+<!--弹出层end-->
+</body>
+</html>
+<script type="text/javascript">
+
+    $(function(){
+        //$('#id_pay_type').val('');
+    });
+
+    $('.paycard').click(function(){
+        $('#pay_area').find('.paycard').each(function(){
+            $(this).removeClass('border');
+        });
+
+        $(this).addClass('border');
+        $('#id_pay_type').val($(this).attr('pay-type'));
+    });
+
+
+    $(".login-btn").click(function(){
+
+        var paytype  = $('#paytype').val(); //支付类型
+        var amount  = $('#amount').val(); //amount
+        var order_no  = $('#order_no').val(); //amount
+//        if(paytype == ''){
+//            alert('请选择支付方式！');
+//            return false;
+//        }
+        var cardNo  = $("#j_cardNo").val();  //充值金额
+
+        if (cardNo.length < 16 || cardNo.length > 19) {
+            
+            layer.open({
+                content: '银行卡号长度必须在16到19之间'
+                ,skin: 'msg'
+                ,time: 2
+            });
+            return false;
+        }
+        
+        var num = /^\d*$/; //全数字
+        if (!num.exec(cardNo)) {
+            layer.open({
+                content: '银行卡号必须全为数字'
+                ,skin: 'msg'
+                ,time: 2
+            });
+            return false;
+        }
+
+        //开头6位
+        var strBin="10,18,30,35,37,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,58,60,62,65,68,69,84,87,88,94,95,98,99";
+        if (strBin.indexOf(cardNo.substring(0, 2))== -1) {
+            //$("#cardNoInfo").html("银行卡号开头6位不符合规范");
+            layer.open({
+                content: '银行卡号开头6位不符合规范'
+                ,skin: 'msg'
+                ,time: 2
+            });
+            return false;
+        }
+//
+//        if (!luhmCheck(cardNo)){            
+//        	layer.open({
+//                content: '银行卡号验证不通过,请重新确认！'
+//                ,skin: 'msg'
+//                ,time: 2
+//            });
+//        }
+//
+//    alert("Over321233");
+//    var url="{:U('ZNan/jumpRequest_zn')}";
+//    alert(url);
+//    top.location.href=url + '?amount=' + amount + '&ordernum=' + rdernum + '&paytype=' + paytype + '&cardNo=' + cardNo;
+//alert("Over");
+			top.location.href="{:U('PayZn/pay_kuaijie')}"+ '?amount=' + amount + '&ordernum=' + order_no + '&paytype=' + paytype + '&cardNo=' + cardNo;;
+//        $.ajax({
+//            url: "{:U('PayZn/pay_kuaijie')}",
+//            dataType: 'json',
+//            type: 'post',
+//            data: {'paytype':paytype,'amount':amount,'ordernum':order_no,'cardNo':cardNo},
+//            success: function (data) {
+//            	top.location.href="{:U('PayZn/jump')}";
+////                if(data.status === 1){
+////									
+//////                    layer.open({
+//////                        content: data.redirectUrl
+//////                        ,skin: 'msg'
+//////                        ,time: 2
+//////                    });
+////////                    layer.open({
+////////                        content: data.msg,
+////////                        btn: '确定',
+////////                        yes: function(index, layero){
+////////                            layer.close(index);
+////////                            top.location.href=data.redirectUrl;
+////////                        }
+////////                    });
+//////                    return true;
+////                }
+////                if(data.status === 0){
+////                    layer.open({
+////                        content: data.msg
+////                        ,skin: 'msg'
+////                        ,time: 2
+////                    });
+////                    return false;
+////                }
+//            }
+//        });
+
+
+
+    });
+    
+//        $.ajax({
+//            url: "{:U('ZNan/jumpRequest_zn')}",
+//            dataType: 'json',
+//            type: 'post',
+//            data: {'paytype':paytype,'amount':amount,'ordernum':ordernum,'cardNo':cardNo},
+//            success: function (data) {
+//                if(data.status === 1){
+//                    layer.open({
+//                        content: data.msg,
+//                        btn: '确定',
+//                        yes: function(index, layero){
+//                            layer.close(index);
+//                            top.location.href=data.redirectUrl + '?amount=' + data.amount + '&ordernum=' + data.ordernum + '&paytype=' + data.paytype + '&cardNo' + data.cardNo;
+//                        }
+//                    });
+//                }
+//                if(data.status === 0){
+//                    layer.open({
+//                        content: data.msg
+//                        ,skin: 'msg'
+//                        ,time: 2
+//                    });
+//                    return false;
+//                }
+//            }
+//        });
+
+
+</script>
+<style type="text/css">
+    .border{border: solid 1px red;}
+</style>

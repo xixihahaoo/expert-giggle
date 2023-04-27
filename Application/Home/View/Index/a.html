@@ -1,0 +1,238 @@
+<script src="__JS__/3.1.1jq/jquery-3.1.1.min.js">
+</script>
+<script src="__JS__/highstock.js"></script>
+<script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+
+<body style='margin-left: 0;margin-right: 0'>
+    <div id="container" style="height: 100%; min-width: 310px"></div>
+    <script type="text/javascript">
+    var chart1; // 全局变量
+    var bardata = [];
+    var interval = "{$interval}";
+    var length = "{$length}";
+    
+    Highcharts.setOptions({
+            global: {
+                useUTC: false
+            },
+            legend: {
+                enabled: false,
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false // 禁用版权信息
+            },
+            chart: {
+                events: {
+                    load: updateData1M // 图表加载完毕后执行的回调函数
+                },
+                marginLeft: 3,
+                marginRight: 3,
+            },
+            title: {
+                text: '',
+            },
+            plotOptions: {
+                area: {
+                    enableMouseTracking: false
+                },
+                line: {
+                    enableMouseTracking: false
+                },
+                bar: {
+                    enableMouseTracking: false
+                },
+                candlestick : {
+                    color : 'green',
+                    upColor : 'red',
+                    lineColor: '#33AA11',
+                    upLineColor: '#DD2200',
+
+                    lineWidth: 1,   //线条宽度
+                    pointWidth:8    //柱子宽度
+                }
+            },
+            tooltip: {
+                enabled: true,
+            },
+            yAxis:{
+                showLastLabel: false,
+
+            },
+        });
+
+
+    function renderIt1D(data) {
+
+        bardata = [];
+        for (i = 0; i < data.length; i++) {
+            bardata.push([
+                data[i][0], // the date
+                data[i][1], // open
+                data[i][2], // high
+                data[i][3], // low
+                data[i][4] // close
+            ]);
+        }
+        chart1 = new Highcharts.Chart('container', {
+
+            chart: {
+                panning: true,
+                pinchType: 'x',
+                zoomType: 'x',
+                // resetZoomButton: {
+                //     position: {
+                //         x: 0,
+                //         y: -60
+                //     }
+                // },
+                backgroundColor: 'rgba(0,0,0,0)',
+                renderTo: $('#container')[0]
+            },
+            
+            yAxis: {
+                type: 'value',
+                title: {
+                    text: ''
+                },
+                labels: {
+                    x: -45,
+                    formatter: function(){
+                         return this.value.toFixed(length);  //保留小数
+                    }
+                },
+                gridLineWidth: 0.5,
+                opposite: true,
+
+                plotLines: [{
+                    color: 'red', //线的颜色，定义为红色
+                    dashStyle: 'dash', //默认值，这里定义为实线
+                    value: data[data.length-1][4].toFixed(length), //定义在那个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+                    width: 1, //标示线的宽度，2px
+                    id:'plot-line',
+                    label: {
+                        text: '<span style="color: #FFF;font-family:\'微软雅黑\'; background-color: #e4393c; margin-right: 10px;">' + data[data.length-1][4].toFixed(length) + '</span>',
+                        align: 'right',
+                        useHTML: true,
+                        x: -10,
+                        y: -15,
+                        style: {
+                            color: 'red',
+                        }
+                    }
+                }]
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: {
+                    millisecond: '%H:%M:%S.%L',
+                    second: '%H:%M:%S',
+                    minute: '%H:%M',
+                    hour: '%H:%M',
+                    day: '%m-%d',
+                    week: '%m-%d',
+                    month: '%y-%m',
+                    year: '%Y'
+                },
+                labels: {
+                    enabled: true, //是否显示x轴时间抽
+                },
+                
+                crosshair: false,   //点击时禁止出现线条
+                tickPixelInterval:80,   //时间抽刻度显示 像素间隔
+                
+            },
+            tooltip: {
+                enabled: true,
+                formatter: function() {
+                        var tip = "";
+                        // tip = this.points[0].series.name+"<br/> ";
+                        tip += Highcharts.dateFormat("%Y-%m-%d", this.point.x, false) + "<br/>";
+                        tip += "开盘价：" + this.point.open + "<br/>";
+                        tip += "收盘价：" + this.point.close + "<br/>";
+                        tip += "最高价：" + this.point.high + "<br/>";
+                        tip += "最低价：" + this.point.low + "<br/>";
+                        return tip;
+                },
+                followTouchMove:false,
+            },
+            series: [{
+                type: 'candlestick',
+                data: data,
+                fillOpacity: 0.3,
+                animation: false
+
+            }]
+        });
+    }
+    
+    function Init1D() {
+        var index = layer.load(2);
+        $.getJSON('http://chart.ronmei.com/chart/chart.php?Code={$code}&interval={$interval}&Rows=20&callback=?', function(jsondata) {
+            data        = jsondata;
+            renderIt1D(data);
+            layer.close(index);
+        });
+    };
+
+
+    function updateData1M(price) {
+
+
+        var chart1   = $('#container').highcharts();
+        
+        series      = chart1.series[0];
+        
+        price       = parseFloat(price);
+
+        if(bardata != '')
+        {
+            bardataLength = bardata.length;
+
+            lastData = bardata[bardataLength-1];
+
+            lastData[4] = price;
+
+            if(lastData[2] < price)
+                lastData[2] = price;
+
+            if(lastData[3] > price)
+                lastData[3] = price;
+
+            bardata[bardataLength-1] = lastData;
+            
+            series.setData(bardata);
+
+            // renderIt1D(bardata);
+        }
+        
+        //更新直线
+        yAxis = chart1.yAxis[0];
+        yAxis.removePlotLine('plot-line');
+        yAxis.addPlotLine({
+            color: 'red',
+            dashStyle:'dash',
+            value: price,
+            width: 1,
+            id: 'plot-line',
+            label: {
+                text: '<span style="color: #FFF;font-family:\'微软雅黑\'; background-color: #e4393c; margin-right: 10px;">' + price + '</span>',
+                align: 'right',
+                useHTML: true,
+                x: -10,
+                y: -15,
+                style: {
+                    color: 'red'
+                },
+            },
+        });
+    }
+    
+
+    $(function() {
+        Init1D();
+    });
+    </script>
+</body>

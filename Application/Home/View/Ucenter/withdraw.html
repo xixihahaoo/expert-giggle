@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)http://pro.jinguzhi.net/mine/withdraw.html -->
+<html style="display: block;"><head>
+    <title>我的账户 - {:config('s_domain_name')}{:config('webname')}</title>
+    <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/merge-withdraw.css">
+    <script typet="text/javascript" src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+</head>
+<body>
+    
+<style type="text/css">
+ .get-smscode {
+    height: .45rem;
+    line-height: .3rem;
+    padding: 0.08rem;
+    color: #fff;
+    background-color: #F70;
+}
+</style>
+
+
+<div id="doc" class="doc page-account" data-url-save="withdraw">
+    <!-- 头部 -->
+    <header class="page-header">
+        <div class="content">
+            <h3>提款</h3>
+            <div class="left">
+                 <a href="{:U('User/index')}" class="iconfont icon-xiangzuojiantou"></a>
+            </div>
+            <div class="right">
+                <a href="{:U('User/record')}">提款记录</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-withdrawal">
+        <div class="content">
+            <div class="summary">
+                <div class="text-minor title">账户余额</div>
+                <div class="text-stress text-xxl balance">{$user.balance}</div>
+            </div>
+
+         <if condition="$user[banknumber] eq '' ">
+            <div class="nobind" style="display: block;">
+                <div class="text-stress text-center">您尚未绑定提现银行卡，请通过充值绑定提现银行卡</div>
+                <div class="text-stress text-center">请先添加银行卡再进行提款</div>
+                <div class="action">
+                    <a href="{:U('banks')}" class="button button-stress">马上添加银行卡</a>
+                </div>
+            </div>
+         
+           <else />
+                    <div class="bind" style="display:block;">
+                        <ul class="mod-list">
+                            <li class="clearfix">
+                                <label class="left">提款金额</label>
+                                <input name="money" class="left input amount" type="tel" maxlength="10" autocomplete="off" placeholder="请输入金额" onkeyup="value=value.replace(/[^\d\.]/g,'')">
+                                <span class="right">元</span>
+                            </li>
+
+<!--                          <li class="clearfix">
+                                <label class="left">验证码</label>
+                                <input name="pwd" class="left input sms" type="tel" maxlength="10" autocomplete="off" placeholder="请输入短信验证码">
+                               <input class="right get-smscode disabled" style="border:none;height: 0.4rem;line-height: 0.2rem" type="button" value="获取验证码" id="mes" onclick="javascript:mbtime(this);">
+                               <input type="hidden" value="{$mobile.utel}" class="mobile">
+                            </li> -->
+                            
+                            <li class="clearfix">
+                                <label class="left">提款银行卡</label>
+                                <a href="{:U('User/banks')}" style="display:block;">
+                                <span class="left withdraw-bank" style="margin-top: 12px; margin-left:8px">{$user.bankname}</span>
+                                <span class="iconfont right arrow-right icon-xiangyoujiantou"></span>
+                                </a>
+                            </li>
+    
+                            <li class="clearfix">
+                                <label class="left">提款密码</label>
+                                <input class="left input trade_pwd" type="password" autocomplete="off" placeholder="请输入提款密码">
+                            </li>
+                        </ul>
+                        <div class="action">
+                            <a href="javascript:void(0)" class="button button-stress next-step">确定</a>
+                        </div>
+                    </div>
+          </if>
+
+            <div class="ps text-lesser" style="text-align:left">
+                {$news}
+                <!--<p class="text-highs">温馨提示:</p>-->
+                <!--<p>1、消费用户提款每笔2元手续费。单笔出金金额最少12元。为防止恶意提款。每日提款申请次数最多为2次。超过次日处理</p>-->
+                <!--<p>2、单笔充值无消费者提现时需提供身份证与银行卡给客服进行核实。如信息核实无误。将会在7-15个工作日内处理。并收取2%的手续费。最低2元；</p>-->
+                <!--<p>3、周一至周五09:00-15:00以后的提款申请延至第二天处理。周五15:00后提款，延至下个工作日处理。提现到账时间最快2小时，最晚1个工作日，如遇节假日顺延。</p>-->
+                <!--<p>4、周六周日提款延迟到周一处理，若节假日提款，一律节后第一个工作日处理。</p>-->
+            </div>
+
+        </div>
+    </section>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+          
+    $(".next-step").click(function(){
+
+        var index = layer.load(0, {
+            shade: [0.1,'#fff'] //0.1透明度的白色背景
+        });
+        var amount          = $(".amount").val();  //提现金额
+        var sms             = $(".sms").val();     //短信验证码
+        var trade_pwd       = $('.trade_pwd').val();
+        var banks           = $(".withdraw-bank").html();  //提现银行
+        
+        $.ajax({
+            
+            url:"{:U('User/withdraw_check')}",
+            dataType: 'json',
+            type: 'post',
+            data: {"amount":amount,"sms":sms,"banks":banks,'trade_pwd':trade_pwd},
+            success:function(data){
+
+                   if(data.status === 0){
+                        layer.close(index);                     
+                        layer.msg(data.msg, {icon: 5});
+                         return false;
+                    }
+
+                    if(data.status === 1){
+                        // layer.close(index);
+                        layer.msg(data.msg, {icon: 6});
+                         window.setTimeout("window.location='{:U('User/banks')}'",1000);
+                         return false;
+                    }
+                    
+                    if(data.status === 2){
+                        layer.msg(data.msg, {icon: 6});
+                        window.setTimeout("window.location='{:U('User/tradePwd')}'",1000);
+                        return false;
+                    }
+            }
+    });
+});
+
+
+        var wait=60;
+        function mbtime(o) {
+            if (wait == 60) {
+                get_phones_code();
+            }
+            if (wait == 0) {
+                o.removeAttribute("disabled");
+                o.value="重新获取";
+                wait = 60;
+            } else {
+                o.setAttribute("disabled", true);
+                o.value="重新发送(" + wait + ")";
+                wait--;
+                setTimeout(function() {mbtime(o)},1000)
+            }
+        }
+
+            function get_phones_code(){
+  
+                        var index = layer.load(0, {
+                            shade: [0.1,'#fff'] //0.1透明度的白色背景
+                         });
+
+                        var numbers = /^1\d{10}$/;
+                        var mobile   = $(".mobile").val().replace(/\s+/g,""); //手机号
+                         if(!numbers.test(mobile) || mobile.length ==0){
+                                                     
+                                    layer.msg('手机号码格式错误', {icon: 5});
+                                    return false;
+                          }
+
+
+                        $.ajax({
+                            url:"{:U('Tools/sms_smsverify')}",
+                            dataType: 'json',
+                            type: 'get',
+                            data: {"mobile":mobile},
+                            success:function(data){
+
+                                    if(data.ret_code == 1){
+                                        
+                                        layer.close(index);
+                                        layer.msg(data.ret_msg, {icon: 6});
+
+                                    } else{
+                                        layer.close(index);
+                                        layer.msg(data.ret_msg, {icon: 5});
+
+                                    }
+                            }
+                    });
+}
+</script>

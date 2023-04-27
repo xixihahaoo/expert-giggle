@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- saved from url=(0072)http://zhongying.gwecaopan.com/activity/Article.html?type=2&varietyId=58 -->
+<html>
+<head>
+<title>{:config('s_domain_name')}{:config('webname')}</title>
+<include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/rule.css">
+    <style>
+        .main{ width: 90%; margin: 0 auto; margin-top: 0.6rem; padding-bottom: 0.5rem;}
+        h1, h2, h3, h4{ font-weight: bold; margin-top: 0.1rem;}
+    </style>
+</head>
+<body>
+
+<div id="doc" class="doc page-home nofooter">
+    <!-- 头部 -->
+    <header class="page-header">
+        <div class="content">
+            <h3 id="titleA">{$option.capital_name}&nbsp;玩法规则</h3>
+            <div class="left">
+                <a href="javascript:window.history.back()" class="iconfont icon-youjiantou" id="back2"></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="main" id="contentA">
+
+            <div style="margin-left: -.15rem;"> {$news}</div>
+    </section>
+</div>
+<script>
+    
+    var $Title = $('#titleA');
+    var $Content = $('#contentA');
+    var json = {};
+    
+    json.type = GetQueryString('type');
+    json.varietyId = GetQueryString('varietyId');
+    
+    $.ajax({
+        url: '/user/article/articleDetail.do',
+        data: json,
+        dataType: 'json',
+        type: 'post',
+        success: function (data) {
+            if(data.code==200){
+                $Title.html(data.data.title);
+                $Content.html(data.data.content);
+            }
+        }
+    });
+    
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null)return unescape(r[2]);
+        return null;
+    }
+    
+</script>
+
+
+
+</body></html>

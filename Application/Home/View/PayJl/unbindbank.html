@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>银行卡-{:config('s_domain_name')}{:config('webname')}</title>
+    <include file="Common:header" />
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="__CSS__/jlpay/JlBanks.css">
+
+    <link rel="stylesheet" href="__CSS__/merge-withdraw.css">
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+
+    <style>
+        .shadeWrap{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:99; background:rgba(0,0,0,.3); font-size:16px;}
+        .shadeWrap .content{ width: 75%; background: #fff; border-radius: 5px; position: absolute; top: 50%; margin-top: -20.5%; left: 50%; margin-left: -38%; text-align: center;box-shadow: 0 0 5px rgba(0,0,0,.4); }
+        .shadeWrap .main{padding: 25px; border-bottom: 1px solid #eee;}
+        .shadeWrap .action{ width:100%; height:38px; line-height: 38px; border-radius: 0 0 5px 5px;font-size:16px; color:#fff;background:#da3333;}
+    </style>
+</head>
+<body>
+    <div class="wrap gray">
+        <header class="page-header">
+            <div class="content">
+                <h3>我的快捷</h3>
+                <div class="left" style="position: absolute;">
+                     <a href="{:U('User/account')}" class="iconfont icon-xiangzuojiantou"></a>
+                </div>
+                <div class="right" style="position: absolute; right: 0">
+                    <a href="{:U('bindCard')}">添加银行卡</a>
+                </div>
+            </div>
+        </header>
+        <div class="page-content">
+
+                <ul class="" style="display:none">
+                    <img src="__IMG__/bank5.png" alt="广发银行" class="img">
+                    <img src="__IMG__/bank3.png" alt="浦发银行" class="img">
+                    <img src="__IMG__/bank4.png" alt="兴业银行" class="img">
+                    <img src="__IMG__/bank2.png" alt="招商银行" class="img">
+                    <img src="__IMG__/bank6.png" alt="中国银行" class="img">
+                    <img src="__IMG__/bank7.png" alt="中国农业银行" class="img">
+                    <img src="__IMG__/bank12.png" alt="中国建设银行" class="img">
+                    <img src="__IMG__/bank9.png" alt="中国光大银行" class="img">
+                    <img src="__IMG__/bank10.png" alt="平安银行" class="img">
+                    <img src="__IMG__/bank11.png" alt="中国民生银行" class="img">
+                    <img src="__IMG__/bank16.png" alt="中信银行" class="img">
+                    <img src="__IMG__/bank8.png" alt="中国工商银行" class="img">
+                    <img src="__IMG__/bank15.png" alt="交通银行" class="img">
+                    <img src="__IMG__/sh.png" alt="上海银行" class="img">
+                    <img src="__IMG__/yc.png" alt="中国邮政储蓄银行" class="img">
+                </ul>
+
+            <div class="hasBind">
+            <notempty name="bank">
+                <div class="bankBg clearfix">
+                    <div class="bindBankInfo clearfix">
+                        <a href="javascript:void(0)" onclick="unbind({$bank['id']})" class="fr button unbindBtn" style="border: #000;background: #fff;">解绑</a>
+                        <img src="__IMG__/bank6.png" alt="" id="bankIcon">
+                        <span class="margin">{$bank.user_name}&nbsp;{$bank.phone}</span>
+                        <div>
+                            <p id="j_bindBankName" class="margin"></p>
+                            <p class="margin">{$bank.bank_name}&nbsp;
+                                <eq name="bank['card_type']" value="0">
+                                    储蓄卡
+                                <else />
+                                    信用卡
+                                </eq>
+                            </p>
+
+                            <p id="j_bindBankName" class="margin">
+                                <eq name="bank['card_sts']" value="0">
+                                    已生效
+                                <else />
+                                    未生效
+                                </eq>
+                            </p>
+                            <p id="bank" style="display: none;">{$bank.bank_name}</p>
+                        </div>
+                    </div>
+                    <div class="bankNo">
+                        <p style="text-align:right">{$bank.card_no}<span id="j_bindBankNo"></span></p>
+                    </div>
+                </div>
+            </notempty>
+                <p class="line"></p>
+                <p class="centerT">为保障账户资金安全，目前仅支持绑定一张快捷银行卡</p><p class="centerT">用户如需要换卡，请先解绑</p>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+     
+  //更换银行卡图片
+   $.each($(".img"),function(){
+         
+        var bank = $("#bank").html();
+        if(bank == $(this).attr('alt')){
+            
+            $("#bankIcon").attr('src',$(this).attr('src'));
+        }
+   });
+
+    function unbind(id){
+        layer.confirm('确定解除银行卡绑定?', {icon: 3, title:false}, function(index){
+            $.ajax({
+                url:"{:U('unbindBank')}",
+                type: 'post',
+                data: {"id":id},
+                success:function(data){
+                    if(data.status == 0){
+                        layer.msg(data.msg, {icon: 2});
+                    }
+
+                    if(data.status === 1){
+                        layer.msg(data.msg, {icon: 1});
+                        location.reload();
+                    }
+                }
+            });
+            layer.close(index);
+        });
+    }
+</script>

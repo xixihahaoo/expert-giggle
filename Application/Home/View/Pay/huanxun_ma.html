@@ -1,0 +1,119 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>账户充值</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="true">
+
+    <link rel="stylesheet" href="__CSS__/merge.css">
+    <link rel="stylesheet" href="__CSS__/merge_product.css">
+
+
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+    <style>
+        #licheng{
+            width: 230px;
+            height: 230px;
+            /*background: #000;*/
+            margin: 0 auto;
+            margin-top: 0.8rem;
+        }
+        h6{
+            text-align: center;
+            margin-top: 0.2rem;
+            font-size: 0.22rem;
+        }
+		h6 a{font-size:20px; text-decoration:underline;color:blue;} 
+		
+        #licheng img{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<header class="page-header" id="head">
+    <div class="content">
+        <h3></h3>
+        <div class="left">
+            <a href="javascript:window.history.back()" class="iconfont go-back icon-xiangzuojiantou"></a>
+        </div>
+        <div class="right"></div>
+    </div>
+</header>
+<div id="licheng">
+    <img src="{:U('Payips/echo_img')}?data={$zhifuImg}" alt="">
+	<!--img src="http://huanxun.edc6.com/qrcode.php?data={$zhifuImg}" -->
+</div>
+<h6>
+    长按二维码进行充值
+</h6>
+<h6>
+
+    <a class="login-btn do-login" id="sub">返回账户中心</a>
+</h6>
+
+<input type="hidden" value="{$oid}" id="o_id" name="o_id">
+<script type="text/javascript">
+
+    function redirect_user(){
+        top.location.href="{:U('pay/commback')}";
+    }
+
+    $(".login-btn").click(function(){
+
+        var o_id  = $('#o_id').val();   //支付类型
+
+        if(o_id == ''){
+            alert('没有找到充值单号！');
+            return false;
+        }
+
+        var index = layer.open({
+            type: 2,
+            shadeClose: false,
+            content: '正在验证充值结果...'
+        });
+
+
+        setInterval("redirect_user()", 2000);
+
+        return false;
+
+        $.ajax({
+            url: "{:U('Paysxy/get_pay_result')}",
+            dataType: 'json',
+            type: 'get',
+            data: {'oid': o_id},
+            success: function (data) {
+                layer.close(index);
+                if(data.status === 1){
+                    layer.open({
+                        content: data.ret_msg,
+                        btn: '确定',
+                        yes: function(index, layero){
+                            top.location.href="{:U('User/index')}";
+                        }
+                    });
+                }
+                if(data.status === 0){
+                    layer.open({
+                        content: data.ret_msg
+                        ,skin: 'msg'
+                        ,time: 2
+                    });
+                    return false;
+                }
+            }
+        });
+
+
+    });
+</script>
+</body>
+</html>

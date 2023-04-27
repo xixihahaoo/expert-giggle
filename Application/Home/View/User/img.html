@@ -1,0 +1,41 @@
+<extend name="Base/common"/>
+<block name="content">
+<link rel="stylesheet" href="__CSS__/global.css">
+<link rel="stylesheet" href="__CSS__/index.css">
+<link rel="stylesheet" href="__CSS__/pwd.css">
+<script language="javascript" type="text/javascript" src="__JS__/jquery.qrcode.min.js"></script>
+
+<div class="content">
+<header class="list-head">
+	<nav class="list-nav clearfix"> <a href="javascript:history.go(-1)" class="list-back"></a>
+		<h3 class="list-title">推广</h3>
+	</nav>
+</header>
+<p style="text-align:center"><input  id='link' type="text" value="{$url}" class="st"/>&nbsp;&nbsp;<button class="tjrz" id="cop" onclick="copy();">复制推广链接</button></p>
+<div class="form_sfrz" id="code"></div>
+</div>
+<style>
+.yh_all{ font-size:16px; font-weight:bold; border:none;}
+.zl_table{ border-radius:5px; background:#fff; }
+.zl_table tr{ height:42px; line-height:42px;}
+.st{ width:50%; height:32px; line-height:32px; border:none; border-radius:3px; }
+.tjrz{ background:none; border:none; padding:5.5px 2px; background:#ffb709; border-radius:2px; color:#fff; font-size:14px; margin-top:12px;}
+.tjrz2{ background:none; border:none; padding:9px 35px; background:#19b2ff; border-radius:2px; color:#fff; font-size:14px; margin-top:12px;}
+.form_sfrz{  border-radius:5px; padding:20px 0 20px 20px; width:100%; font-size:15px; text-align:center;}
+.form_sfrz img{width:70%}
+</style>
+
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		$('#code').qrcode($("#link").val());
+	});
+    function copy(){ 
+        var content=$('#link');//对象是多行文本框contents 
+        content.select(); //选择对象 
+        document.execCommand("Copy"); //执行浏览器复制命令
+        $('#cop').html('已复制');
+    } 
+</script> 
+
+
+</block>

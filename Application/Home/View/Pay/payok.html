@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html style="display: block;"><head>
+    <include file="Common:header" />
+    <title class="productName">{:config('s_domain_name')}{:config('webname')}</title>
+    <link rel="stylesheet" href="__CSS__/index_merge.css">
+    <script typet="text/javascript" src="__JS__/1.8.3jq/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="doc" class="doc page-home" data-url-query-index="/quote">
+    <!-- 头部 -->
+    <header class="page-header">
+        <div class="content">
+            <h3 class="productName">{:config('s_domain_name')}{:config('webname')}</h3>
+
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-home" style="padding-top:0.5rem;">
+        <div style="padding-top: 1.2rem;">
+            <h5 style="width: 128px;height: 128px;margin: 0 auto"><img src="__PUBLIC__/images/yaho.png" alt=""></h5>
+            <p style="text-align: center;color: #941E22;font-size: 0.6rem">{$msg}</p>
+        </div>
+
+
+    </section>
+
+    <!-- 底部 -->
+
+
+    <include file="Common:footer" />
+</div>
+
+</body>
+</html>

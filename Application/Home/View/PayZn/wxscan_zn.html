@@ -1,0 +1,182 @@
+<?php 
+/**
+ * 中南微信扫码支付
+ * by linjuming 2017-4-23
+ * --------------------------------
+ */
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>账号充值</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="true">
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" href="__CSS__/merge.css?v={$cache_version}">
+    <link rel="stylesheet" href="__CSS__/merge_product.css?v={$cache_version}">
+    <link rel="stylesheet" href="__CSS__/payzn_weiXinScan_zn.css?v={$cache_version}">
+
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+
+    <script language="javascript" type="text/javascript" src="/Public/Home/js/jquery.qrcode.min.js"></script>
+
+</head>
+<body>
+
+<header class="page-header" id="head">
+    <div class="content">
+        <div class="left">
+            <a href="javascript:window.history.back()" class="iconfont go-back icon-xiangzuojiantou"></a>
+        </div>
+        <div class="right"></div>
+    </div>
+</header>
+<p style="padding-top: 100px;text-align: center;font-size: 20px;display: none;"> {$zn_rs['code_img_url']} </p>
+<div style="text-align: center;padding-top: 100px;">
+<input style="height: 50px;width: 300px;font-size: 20px;" type="text" value="{$zn_rs['code_img_url']}"/>
+</div>
+<h6><a href="javascript:;" onclick="fuzhi()">复制链接</a></h6>
+<h6>
+		请按如下步骤操作：</h6>
+		<p style="margin-left: 90px;font-size: 13px;">
+		1、复制以上链接；<br>
+		2、在公众号的聊天窗口粘帖并发送；<br>
+		3、点击发送的链接进行支付；<br>
+		4、完成支付。<br> 
+	</p>
+    
+
+<input type="hidden" name="oid" id="oid" value="{$zn_rs['order_no']}">
+
+<script type="text/javascript">
+
+$("input:text").click(function(){
+    $(this).select();
+});
+
+function fuzhi(){
+	alert('浏览器不支持，请手动长按复制！')
+	$("input:text").select();
+}
+function check_pay_result()
+{       
+        var index = layer.open({
+            type: 2
+            ,content: '加载中'
+        });
+        
+        var order_no = $('#oid').val();
+
+        $.ajax({
+        url : "{:U('Home/PayZn/get_pay_result')}",
+        dataType : 'json',
+        type : 'post',
+        data :{'order_no':order_no},
+        success : function(data){
+            if(data.status === 1){
+                layer.close(index);
+                layer.open({
+                    content: data.ret_msg,
+                    btn: '确定',
+                    yes: function(index, layero){
+                        top.location.href="/Home/User/index.html";
+                    }
+                });
+            }else{
+                layer.close(index);
+                layer.open({
+                    content: data.ret_msg,
+                    skin: 'msg',
+                    time: 2
+                });
+            }
+            
+        }
+    });
+}
+
+
+
+// /**
+//  * 返回用户账号页面
+//  */
+// function go_back_to_account(){
+//     check_pay_result(true);
+// }
+
+
+
+// /**
+//  * 检查支付状态
+//  * 参考 http://zqzx.hjb58.com/Home/Paysxy/pay_sxy.html?money=100&ordernum=20170424-10704-470646&paytype=wxpay_syx_weixin&paycode=254
+//  */
+// var auto_re_check = true; // 自动循环检测支付状态
+// function check_pay_result(show_error){
+
+//     $.ajax({
+//         url : "{:U('Home/PayQt/get_pay_result')}",
+//         dataType : 'json',
+//         type : 'get',
+//         data :{
+//             oid : $('#oid').val()
+//         },
+//         success : function(data){
+//             if(data.status === 1){
+//                 layer.open({
+//                     content: data.ret_msg,
+//                     btn: '确定',
+//                     yes: function(index, layero){
+//                         // top.location.href="/Home/User/index.html";
+//                         top.location.href = "U('Home/User/index')";
+//                     }
+//                 });
+//             }else{
+//                 if(show_error){
+//                     layer.open({
+//                         content: data.trade_state_desc,
+//                         skin: 'msg',
+//                         time: 2
+//                     });
+//                 }else if(auto_re_check){
+//                     setTimeout(function(){
+//                         check_pay_result(false);
+//                     }, 1000);
+//                 }
+//             }
+            
+//         }
+//     });
+// }
+// check_pay_result();
+
+/*qrcode生成*/
+function convertCanvasToImage(canvas) {
+    //新Image对象，可以理解为DOM
+    var image = new Image();
+    // canvas.toDataURL 返回的是一串Base64编码的URL
+    // 指定格式 PNG
+    image.src = canvas.toDataURL("image/png");
+    return image;
+}
+
+if($('.qrcode').val() != '')
+{
+    $('#canvas').qrcode($(".qrcode").val());
+
+    var mycanvas1=document.getElementsByTagName('canvas')[0];
+
+    var img=convertCanvasToImage(mycanvas1);
+
+    $('#code_img').append(img);
+}
+
+
+</script>
+
+</body>
+</html>

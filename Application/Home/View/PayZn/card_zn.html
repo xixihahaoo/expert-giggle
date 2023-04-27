@@ -1,0 +1,271 @@
+
+<!doctype>
+<html>
+<head>
+    <include file="Common:header" />
+    <title>账户充值-{:config('s_domain_name')}{:config('webname')}</title>
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/account/account.css">
+    <link rel="stylesheet" href="__CSS__/merge/merge.css">
+
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+    <style>
+        .shadeWrap{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:99; background:rgba(0,0,0,.3); font-size:.16rem;}
+        .shadeWrap .content{ width: 75%; background: #fff; border-radius: .05rem; position: absolute; top: 50%; margin-top: -20.5%; left: 50%; margin-left: -38%; text-align: center;box-shadow: 0 0 .05rem rgba(0,0,0,.4); }
+        .shadeWrap .main{padding: .25rem; border-bottom: 1px solid #eee;}
+        .shadeWrap .action{ width:100%; height:.38rem; line-height: .38rem; border-radius: 0 0 .05rem .05rem;font-size:.16rem; color:#fff;background:#da3333;}
+    </style>
+</head>
+<body>
+<div class="wrap gray">
+    <header class="page-header">
+        <a class="back" href="javascript:window.history.back();">&nbsp;</a>
+
+        <h3>账号信息</h3>
+    </header>
+    <section class="content ">
+        <div class="pay-money p1520 mtb10">
+            <span class="pay-title">Card No.</span><input type="text" id="j_cardNo" name="cardNo" placeholder="请输入待支付银行卡号">
+        </div>
+        <div class="pay-money p1520 mtb10">
+            <span class="pay-title">ID  No.</span><input type="text" id="j_IdNo" name="cardNo" placeholder="身份证号">
+        </div>
+        <div class="pay-money p1520 mtb10">
+            <span class="pay-title">Name</span><input type="text" id="j_cardName" name="cardNo" placeholder="请输入持卡人姓名">
+        </div>
+
+        <eq name="zn_rs['model']" value="Ucenter">
+            <div class="pay-money p1520 mtb10">
+                <span class="pay-title">Mobile</span><input type="text" id="j_Mobile" name="Mobile" placeholder="请输入持卡人手机号码">
+            </div>
+        </eq>
+
+        <input type="hidden" value="{$zn_rs['paytype']}" name="paytype" id="paytype">
+        <input type="hidden" name="order_no" id="order_no" value="{$zn_rs['order_no']}">
+        <input type="hidden" name="amount" id="amount" value="{$zn_rs['amount']}">
+        <input type="hidden" id="model" value="{$zn_rs['model']}">
+        <input type="hidden" name="uid" id="uid" value="{$zn_rs['uid']}">
+        <p class="login-btn">下一步</p>
+
+    </section>
+</div>
+<!--弹出层begin-->
+<div class="shadeWrap" style="display:none;">
+    <div class="content">
+        <div class="main">你还没有绑定银行卡</div>
+        <div class="action">
+            <span class="shadow-btn" href="javascript:void(0);">确定</span>
+        </div>
+    </div>
+</div>
+<!--弹出层end-->
+</body>
+</html>
+<script type="text/javascript">
+    
+    function IdentityCodeValid(code) { 
+        var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江 ",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北 ",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏 ",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外 "};
+        var tip = "";
+        var pass= true;
+        
+        if(!code || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)){
+            tip = "身份证号格式错误";
+            pass = false;
+        }
+        
+       else if(!city[code.substr(0,2)]){
+            tip = "地址编码错误";
+            pass = false;
+        }
+        else{
+            //18位身份证需要验证最后一位校验位
+            if(code.length == 18){
+                code = code.split('');
+                //∑(ai×Wi)(mod 11)
+                //加权因子
+                var factor = [ 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 ];
+                //校验位
+                var parity = [ 1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2 ];
+                var sum = 0;
+                var ai = 0;
+                var wi = 0;
+                for (var i = 0; i < 17; i++)
+                {
+                    ai = code[i];
+                    wi = factor[i];
+                    sum += ai * wi;
+                }
+                var last = parity[sum % 11];
+                if(parity[sum % 11] != code[17]){
+                    tip = "校验位错误";
+                    pass =false;
+                }
+            }
+        }
+        if(!pass) {
+            layer.open({
+                content: tip
+                ,skin: 'msg'
+                ,time: 2
+            });
+            return false;
+
+            
+            }
+
+    }
+    
+    $(function(){
+        //$('#id_pay_type').val('');
+    });
+
+    $('.paycard').click(function(){
+        $('#pay_area').find('.paycard').each(function(){
+            $(this).removeClass('border');
+        });
+
+        $(this).addClass('border');
+        $('#id_pay_type').val($(this).attr('pay-type'));
+    });
+
+
+    $(".login-btn").click(function(){
+
+        var paytype  = $('#paytype').val(); //支付类型
+        var amount  = $('#amount').val(); //amount
+        var order_no  = $('#order_no').val(); //amount
+        var uid  = $('#uid').val(); //amount
+
+        var model  = $('#model').val(); //model
+
+//        if(paytype == ''){
+//            alert('请选择支付方式！');
+//            return false;
+//        }
+        var cardNo  = $("#j_cardNo").val();  //卡号
+        var cardName  = $("#j_cardName").val();  //持卡人姓名
+        var idNo  = $("#j_IdNo").val();  //身份证号码
+
+        if (cardNo.length < 16 || cardNo.length > 19) {
+            
+            layer.open({
+                content: '银行卡号长度必须在16到19之间'
+                ,skin: 'msg'
+                ,time: 2
+            });
+            return false;
+        }
+        
+        var num = /^\d*$/; //全数字
+        if (!num.exec(cardNo)) {
+            layer.open({
+                content: '银行卡号必须全为数字'
+                ,skin: 'msg'
+                ,time: 2
+            });
+            return false;
+        }
+
+        //开头6位
+        var strBin="10,18,30,35,37,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,58,60,62,65,68,69,84,87,88,94,95,98,99";
+        if (strBin.indexOf(cardNo.substring(0, 2))== -1) {
+            //$("#cardNoInfo").html("银行卡号开头6位不符合规范");
+            layer.open({
+                content: '银行卡号开头6位不符合规范'
+                ,skin: 'msg'
+                ,time: 2
+            });
+            return false;
+        }
+        
+        if(model == 'Ucenter')
+        {
+            var mobile = $('#j_Mobile').val().replace(/\s+/g,"");
+            var numbers = /^1\d{10}$/;
+            if(!numbers.test(mobile) || mobile.length ==0){
+                layer.open({
+                    content: '手机号码格式错误'
+                    ,skin: 'msg'
+                    ,time: 2
+                });
+                return false;
+            }
+        }
+
+        IdentityCodeValid(idNo);
+
+//        top.location.href="{:U('PayZn/pay_kuaijie')}"+ '?amount=' + amount + '&ordernum=' + order_no + '&paytype=' + paytype + '&cardNo=' + cardNo+ '&cardName=' + cardName + '&idNo=' + idNo;
+
+			top.location.href="{:U('PayZn/pay_kuaijie')}"+ '?amount=' + amount + '&ordernum=' + order_no + '&paytype=' + paytype + '&cardNo=' + cardNo+ '&cardName=' + cardName + '&idNo=' + idNo +'&model=' + model+'&uid=' + uid+ '&mobile=' + mobile;
+//        $.ajax({
+//            url: "{:U('PayZn/pay_kuaijie')}",
+//            dataType: 'json',
+//            type: 'post',
+//            data: {'paytype':paytype,'amount':amount,'ordernum':order_no,'cardNo':cardNo},
+//            success: function (data) {
+//            	top.location.href="{:U('PayZn/jump')}";
+////                if(data.status === 1){
+////									
+//////                    layer.open({
+//////                        content: data.redirectUrl
+//////                        ,skin: 'msg'
+//////                        ,time: 2
+//////                    });
+////////                    layer.open({
+////////                        content: data.msg,
+////////                        btn: '确定',
+////////                        yes: function(index, layero){
+////////                            layer.close(index);
+////////                            top.location.href=data.redirectUrl;
+////////                        }
+////////                    });
+//////                    return true;
+////                }
+////                if(data.status === 0){
+////                    layer.open({
+////                        content: data.msg
+////                        ,skin: 'msg'
+////                        ,time: 2
+////                    });
+////                    return false;
+////                }
+//            }
+//        });
+
+
+
+    });
+    
+//        $.ajax({
+//            url: "{:U('ZNan/jumpRequest_zn')}",
+//            dataType: 'json',
+//            type: 'post',
+//            data: {'paytype':paytype,'amount':amount,'ordernum':ordernum,'cardNo':cardNo},
+//            success: function (data) {
+//                if(data.status === 1){
+//                    layer.open({
+//                        content: data.msg,
+//                        btn: '确定',
+//                        yes: function(index, layero){
+//                            layer.close(index);
+//                            top.location.href=data.redirectUrl + '?amount=' + data.amount + '&ordernum=' + data.ordernum + '&paytype=' + data.paytype + '&cardNo' + data.cardNo;
+//                        }
+//                    });
+//                }
+//                if(data.status === 0){
+//                    layer.open({
+//                        content: data.msg
+//                        ,skin: 'msg'
+//                        ,time: 2
+//                    });
+//                    return false;
+//                }
+//            }
+//        });
+
+
+</script>
+<style type="text/css">
+    .border{border: solid 1px red;}
+</style>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="hairline" style="font-size: 100px;"><head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>提款记录-{:config('s_domain_name')}{:config('webname')}</title>
+     <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/mine-merge1.css">
+
+    <link rel="stylesheet" href="__CSS__/merge_product.css">
+    <script type="text/javascript">
+        var __baseDir = 'http://'+window.location.host+'/content/';
+    </script>
+    <script>
+        document.getElementsByTagName('html')[0].style.fontSize = '100px'; 
+    </script>
+</head>
+<body>
+<script>
+    (function () {
+        var el = document.createElement('div');
+        el.style.border = '.5px solid transparent';
+        document.body.appendChild(el);
+        if (el.offsetHeight >= 1) {
+            document.documentElement.classList.add('hairline');
+        }
+        document.body.removeChild(el);
+    })();
+</script>
+<div id="doc" class="doc page-mine">
+    <!-- 头部 -->
+    <header class="page-header" id="head">
+        <div class="content">
+            <h3>提款记录</h3>
+                <div class="left">
+                        <a onclick="window.history.back()" class="iconfont go-back icon-xiangzuojiantou"></a>
+                </div>
+            <!-- <a class="right" style="font-size:.16rem" href="http://zhongying.gwecaopan.com/promote/users.html">推广详情</a> -->
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-mine-spread mine-spread-user">
+        <div class="content tab-users">
+            
+            <article class="users text-minor">
+                <div class="th clearfix">
+                    <span class="right">提现金额</span>
+                    <span class="right">申请时间</span>
+                     <span class="right">状态</span>
+                </div>
+
+                <ul class="mod-list">
+                         <volist name="record" id="vo">
+                            <li style="line-height: .4rem;">
+                                <span>{$vo.bpprice}元</span>
+                                <span>{$vo.bptime|date='Y-m-d H:i:s',###}</span>
+                                <span>
+                                <if condition="$vo['cltime']">
+                                 <if condition="($vo['isverified'] eq 0) AND ($vo['status'] eq 0)">
+                                       未通过
+                                 <else />
+                                      已通过
+                                 </if>
+                                <else />
+                                    已提交
+                                </if>
+                                </span>
+                             
+                            </li>
+                         </volist>
+                </ul>
+            </article>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>

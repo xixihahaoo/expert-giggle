@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>银行卡-{:config('s_domain_name')}{:config('webname')}</title>
+    <include file="Common:header" />
+    <meta name="HandheldFriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="__CSS__/nameAndBank.css">
+
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+
+    <style>
+        .shadeWrap{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:99; background:rgba(0,0,0,.3); font-size:16px;}
+        .shadeWrap .content{ width: 75%; background: #fff; border-radius: 5px; position: absolute; top: 50%; margin-top: -20.5%; left: 50%; margin-left: -38%; text-align: center;box-shadow: 0 0 5px rgba(0,0,0,.4); }
+        .shadeWrap .main{padding: 25px; border-bottom: 1px solid #eee;}
+        .shadeWrap .action{ width:100%; height:38px; line-height: 38px; border-radius: 0 0 5px 5px;font-size:16px; color:#fff;background:#da3333;}
+    </style>
+</head>
+<body>
+    <div class="wrap gray">
+        <header class="page-header">
+            <a class="back" href="{:U('User/withdraw')}">&nbsp;</a>
+            <h3>银行卡</h3>
+        </header>
+        <div class="page-content">
+
+        <if condition="$bank[banknumber] eq '' ">
+           <div class="noBind">
+                <div class="bank">
+                    <div class="group">
+                        <label for="">持卡人</label>
+                        <input type="text" class="bankInfo" id="j_name" value="" placeholder="请输入真实姓名">
+             <!--            <img src="__IMG__/tip.png" alt="" style="width:15px;height:15px" class="j_userTip"> -->
+                    </div>
+                    
+                    <p class="line"></p>
+                    <div class="group">
+                        <label for="j_bankNo">身份证号</label>
+                        <input type="text" class="bankInfo" placeholder="请输入身份证号" id="Card">
+                    </div>
+
+                    <p class="line"></p>
+                    <div class="group" id="j_phone1">
+                        <label for="">手机号码</label>
+                        <input type="tel" class="bankInfo" placeholder="请输入银行预留手机号码" id="j_bankPhone" maxlength="11">
+                    </div>
+                    
+
+                    
+                    <p class="line"></p>
+                    <div class="group" id="j_bank">
+                        <label for="">开户银行</label>
+                        <input type="text" readonly="readonly" class="bankInfo" placeholder="请选择银行" id="bankName" style="background-color: white;" >
+                    </div>
+                    
+                    <p class="line"></p>
+                    <div class="group" id="j_bank">
+                        <label for="">开户所在省</label>
+                        <select class="province">
+                        <volist name="city" id="vo">
+                          <option value="{$vo.id}">{$vo.joinname}</option>
+                          </volist>
+                        <select>
+                    </div>
+                    
+                    <p class="line"></p>
+                    <div class="group" id="j_bank">
+                        <label for="">开户所在市</label>
+                       <select id="city">
+                           <option value="0">请选择</option>
+                        <select>
+                    </div>
+                    
+                    <p class="line"></p>
+                    <div class="group" id="j_phone1">
+                        <label for="">开户支行</label>
+                        <input type="text" class="bankInfo" placeholder="请填写开户行" id="branch" maxlength="11">
+                    </div>
+
+                    <p class="line"></p>
+                    <div class="group">
+                        <label for="j_bankNo">银行卡号</label>
+                        <input type="text" class="bankInfo" placeholder="请输入银行卡号" id="j_bankNo">
+                    </div>
+
+                    <p class="line"></p>
+                    <div class="group">
+                        <label for="j_bankNo">确认卡号</label>
+                        <input type="text" class="bankInfo" placeholder="请再次输入银行卡号" id="j_bankNoNote">
+                    </div>
+
+                </div>
+                <ul class="bankList clearfix" style="display:none">
+                    <li data-bankname="广发银行"><img src="__IMG__/bank5.png" alt="" class="img">广发银行<span class="fr">单笔1万，单日1万</span></li>
+                    <li data-bankname="浦发银行"><img src="__IMG__/bank3.png" alt="">浦发银行<span class="fr">单笔2万，单日2万</span></li>
+                    <li data-bankname="兴业银行"><img src="__IMG__/bank4.png" alt="">兴业银行<span class="fr">单笔5千，单日5千</span></li>
+                    <li data-bankname="招商银行"><img src="__IMG__/bank2.png" alt="">招商银行<span class="fr">单笔5万，单日20万</span></li>
+                    <li data-bankname="中国银行"><img src="__IMG__/bank6.png" alt="">中国银行<span class="fr">单笔5万，单日10万</span></li>
+                    <li data-bankname="中国农业银行"><img src="__IMG__/bank7.png" alt="">中国农业银行<span class="fr">单笔2千，单日1万</span></li>
+                    <li data-bankname="中国建设银行"><img src="__IMG__/bank12.png" alt="">中国建设银行<span class="fr">单笔1万，单日1万</span></li>
+                    <li data-bankname="中国光大银行"><img src="__IMG__/bank9.png" alt="">中国光大银行<span class="fr">单笔10万，单日20万</span></li>
+                    <li data-bankname="平安银行"><img src="__IMG__/bank10.png" alt="">平安银行<span class="fr">单笔30万，单日30万</span></li>
+                    <li data-bankname="中国民生银行"><img src="__IMG__/bank11.png" alt="">中国民生银行<span class="fr">单笔5千，单日5千</span></li>
+                    <li data-bankname="中信银行"><img src="__IMG__/bank16.png" alt="">中信银行<span class="fr">单笔20万，单日20万</span></li>
+                    <li data-bankname="中国工商银行"><img src="__IMG__/bank8.png" alt="">中国工商银行<span class="fr">单笔5万，单日5万</span></li>
+                    <li data-bankname="交通银行"><img src="__IMG__/bank15.png" alt="">交通银行<span class="fr">单笔2万，单日2万</span></li>
+                    <li data-bankname="上海银行"><img src="__IMG__/sh.png" alt="">上海银行<span class="fr">单笔5千，单日5万</span></li>
+                    <li data-bankname="中国邮政储蓄银行"><img src="__IMG__/yc.png" alt="">中国邮政储蓄银行<span class="fr">单笔5千，单日5千</span></li>
+                </ul>
+                <p class="tip">持卡人必需与账户信息一致，请确保信息准确，以免影响您的买入与提现操作</p>
+                <input type="button" class="button" value="提交认证" id="j_send" style="background: rgb(218, 47, 52);">
+            </div>
+          <else />
+
+                <ul class="" style="display:none">
+                    <img src="__IMG__/bank5.png" alt="广发银行" class="img">
+                    <img src="__IMG__/bank3.png" alt="浦发银行" class="img">
+                    <img src="__IMG__/bank4.png" alt="兴业银行" class="img">
+                    <img src="__IMG__/bank2.png" alt="招商银行" class="img">
+                    <img src="__IMG__/bank6.png" alt="中国银行" class="img">
+                    <img src="__IMG__/bank7.png" alt="中国农业银行" class="img">
+                    <img src="__IMG__/bank12.png" alt="中国建设银行" class="img">
+                    <img src="__IMG__/bank9.png" alt="中国光大银行" class="img">
+                    <img src="__IMG__/bank10.png" alt="平安银行" class="img">
+                    <img src="__IMG__/bank11.png" alt="中国民生银行" class="img">
+                    <img src="__IMG__/bank16.png" alt="中信银行" class="img">
+                    <img src="__IMG__/bank8.png" alt="中国工商银行" class="img">
+                    <img src="__IMG__/bank15.png" alt="交通银行" class="img">
+                    <img src="__IMG__/sh.png" alt="上海银行" class="img">
+                    <img src="__IMG__/yc.png" alt="中国邮政储蓄银行" class="img">
+                </ul>
+
+            <div class="hasBind" style="display:block;">
+                <div class="bankBg clearfix">
+                    <div class="bindBankInfo clearfix">
+                     <!--    <input class="fr button unbindBtn" type="button" value="解绑"> -->
+                        <a href="javascript:void(0)" onclick="unbind({$bank['uid']})" class="fr button unbindBtn">解绑</a>
+                        <a href="{:U('editbank',array('uid'=>$bank['uid']))}" class="fr button unbindBtn" style="margin-right:10px;">更改</a>
+                        <img src="__IMG__/bank6.png" alt="" id="bankIcon">
+                        <div>
+                            <p id="j_bindBankName" class="margin"></p>
+                            <p class="margin">{$bank.bankname}&nbsp;储蓄卡</p>
+                            <p id="bank" style="display: none;">{$bank.bankname}</p>
+                        </div>
+                    </div>
+                    <div class="bankNo">
+                        <p style="text-align:right">{$bank.banknumber}<span id="j_bindBankNo"></span></p>
+                    </div>
+                </div>
+                <p class="line"></p>
+                <p class="centerT">为保障账户资金安全，目前仅支持绑定一张银行卡</p><p class="centerT">用户如需要解绑换卡，请联系客服</p>
+            </div>
+            </if>
+        </div>
+
+
+    </div>
+    <div class="zp-dialog">
+        <div class="zp-dialog-inner">
+            <div class="zp-content">
+            </div>
+            <div class="btn-container clearfix">
+                <a class="sure-btn" href="javascript:;">确定</a>
+            </div>
+        </div>
+    </div>
+    <!--弹出层begin-->
+    <div class="shadeWrap" style="display: none;">
+        <div class="content">
+            <div class="main">银行预留手机号码不正确</div>
+            <div class="action">
+                <span class="shadow-btn" href="javascript:void(0);">确定</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+     
+        $("#bankName").click(function(){
+
+            $(".bankList").css('display','block');
+        });
+
+        $(".bankList li").click(function(){
+
+                 var bank = $(this).attr('data-bankname');
+                 $("#bankName").attr('value',bank);
+                 $("#bankName").attr('placeholder',bank);
+                 $(".bankList").css('display','none');
+        });
+
+        
+        $(".province").change(function(){
+               var id = $(this).val();
+               $("#city option").remove();
+               $.ajax({
+                       url:"{:U('User/city')}",
+                       dataType:'JSON',
+                       type:'post',
+                       data:{'id':id},
+                       success:function(data){
+                         var html = '';
+                         $.each(data,function(key,val){
+                            html = "<option value="+val.id+">"+val.name+"</option>"
+                            $("#city").append(html);
+                         });
+                       }
+               })
+        });
+
+        $("#j_send").click(function(){
+              var index = layer.load(0, {
+                    shade: [0.1,'#fff'] //0.1透明度的白色背景
+                });
+              var j_name       = $("#j_name").val();    //持卡人
+              var Card         = $("#Card").val();      //身份证号
+              var j_bankPhone  = $("#j_bankPhone").val(); //银行预留手机号
+              var bankName     = $("#bankName").val();  //银行名称
+              var province     = $(".province").val(); //开户所在省
+              var city         = $("#city").val(); //开户所在市
+              var branch       = $("#branch").val();    //支行名称
+              var j_bankNo     = $("#j_bankNo").val();  //银行卡
+              var j_bankNoNote = $("#j_bankNoNote").val();  //确认银行卡
+               
+        $.ajax({
+
+            url:"{:U('User/binding')}",
+            dataType: 'json',
+            type: 'post',
+            data: {'j_name':j_name,'Card':Card,'j_bankPhone':j_bankPhone,'bankName':bankName,'province':province,'city':city,'branch':branch,'j_bankNo':j_bankNo,'j_bankNoNote':j_bankNoNote},
+            success:function(data){
+
+                   if(data.status === 0){
+                        layer.close(index);
+                        layer.msg(data.msg, {icon: 7});
+                         return false;
+                    }
+
+                    if(data.status === 1){
+                        layer.close(index);                     
+                        layer.msg(data.msg, {icon: 6});
+                         window.setTimeout("window.location='{:U('User/banks')}'",1000);
+                         return false;
+                    }
+            }
+    });
+});
+
+
+  //更换银行卡图片
+   $.each($(".img"),function(){
+         
+            var bank = $("#bank").html();
+            if(bank == $(this).attr('alt')){
+                
+                  $("#bankIcon").attr('src',$(this).attr('src'));
+            }
+   });
+    function unbind(uid){
+        layer.confirm('确定解除银行卡绑定?', {icon: 3, title:false}, function(index){
+            //do something
+            $.ajax({
+                url:"{:U('User/unbind')}",
+                type: 'post',
+                data: "uid="+uid,
+                success:function(data){
+                    if(data.status == 0){
+                        layer.msg(data.msg, {icon: 2});
+                    }
+
+                    if(data.status === 1){
+                        layer.msg(data.msg, {icon: 1});
+                    }
+                }
+            });
+            layer.close(index);
+        });
+    }
+</script>

@@ -1,0 +1,77 @@
+
+<!doctype>
+<html>
+<head>
+    <include file="Common:header" />
+    <title>账户充值-{:config('s_domain_name')}{:config('webname')}</title>
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/account/account.css">
+    <link rel="stylesheet" href="__CSS__/merge/merge.css">
+
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+    <style>
+        .shadeWrap{ position:fixed; width:100%; height:100%; top:0; left:0; z-index:99; background:rgba(0,0,0,.3); font-size:.16rem;}
+        .shadeWrap .content{ width: 75%; background: #fff; border-radius: .05rem; position: absolute; top: 50%; margin-top: -20.5%; left: 50%; margin-left: -38%; text-align: center;box-shadow: 0 0 .05rem rgba(0,0,0,.4); }
+        .shadeWrap .main{padding: .25rem; border-bottom: 1px solid #eee;}
+        .shadeWrap .action{ width:100%; height:.38rem; line-height: .38rem; border-radius: 0 0 .05rem .05rem;font-size:.16rem; color:#fff;background:#da3333;}
+    </style>
+</head>
+<body>
+<div class="wrap gray">
+    <header class="page-header">
+        <a class="back" href="javascript:window.history.back();">&nbsp;</a>
+
+        <h3>账号信息</h3>
+    </header>
+    <section class="content ">
+        <div class="pay-money p1520 mtb10">
+            <span class="pay-title">YZM</span><input type="text" id="j_yzm" name="yzm" placeholder="请输入验证码">
+        </div>
+        <input type="hidden" name="ksPayOrderId" id="ksPayOrderId" value="{$mobao_yzm['ksPayOrderId']}">
+        <p class="login-btn">下一步</p>
+
+    </section>
+</div>
+<!--弹出层begin-->
+<div class="shadeWrap" style="display:none;">
+    <div class="content">
+        <div class="main">你还没有绑定银行卡</div>
+        <div class="action">
+            <span class="shadow-btn" href="javascript:void(0);">确定</span>
+        </div>
+    </div>
+</div>
+<!--弹出层end-->
+</body>
+</html>
+<script type="text/javascript">
+
+    $(function(){
+        //$('#id_pay_type').val('');
+    });
+
+    $('.paycard').click(function(){
+        $('#pay_area').find('.paycard').each(function(){
+            $(this).removeClass('border');
+        });
+
+        $(this).addClass('border');
+        $('#id_pay_type').val($(this).attr('pay-type'));
+    });
+
+    $(".login-btn").click(function(){
+
+        var ksPayOrderId  = $('#ksPayOrderId').val(); //支付类型
+        var yzm  = $("#j_yzm").val();  //卡号
+
+		top.location.href="{:U('PayMobao/pay_yzm')}"+ '?ksPayOrderId=' + ksPayOrderId+ '&yzm=' + yzm ;
+
+    });
+    
+
+	
+</script>
+<style type="text/css">
+    .border{border: solid 1px red;}
+</style>

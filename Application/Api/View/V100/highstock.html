@@ -1,0 +1,444 @@
+<script src="__JS__/3.1.1jq/jquery-3.1.1.min.js">
+</script>
+<script src="__JS__/highstock.js"></script>
+
+<body style='margin-left: 0;margin-right: 0'>
+<div id="container" style="height: 100%; min-width: 310px"></div>
+<script type="text/javascript">
+    var chart1; // 全局变量
+    var areadata = [];
+    var linedata = [];
+    var breaks = [];
+    var bardata = [];
+    var interval = "{$interval}";
+    var length = "{$length}";
+
+    function fixTime(time){
+        return Math.floor(time / (60 * 60 * 1000)) * 60 * 60 * 1000;
+    }
+
+    if(interval != '1d'){
+        Highcharts.setOptions(
+                {xAxis: {
+                    tickPositioner:function(){
+                        tickdata = [];
+                        tmpdata = areadata;
+                        try{
+                            start = areadata[0][0];
+                            end = linedata[linedata.length-1][0]
+                        }catch(e){
+                            try{
+                                if(areadata.length > 0){
+                                    end =  areadata[areadata.length-1][0];
+                                }else{
+                                    start = bardata[0][0];
+                                    end = bardata[bardata.length-1][0];
+                                }
+                            }catch(e){
+                            }
+                        }
+                        // tickdata.push(start);
+                        yu = end % (5 * 60 * 1000);
+                        if(yu > 2.5 * 60 * 1000){
+                            end += 5 * 60 * 1000 - yu;
+                        }else{
+                            end -= 5 * 60 * 1000 - yu;
+                        }
+                        yu = start % (5 * 60 * 1000);
+                        if(yu > 2.5 * 60 * 1000){
+                            start +=   yu;
+                        }else{
+                            start -= yu;
+                        }
+                        tickdata.push(start);
+                        tickdata.push(fixTime(start+parseInt((end-start) / 3 * 1)));
+                        tickdata.push(fixTime(start+parseInt((end-start) / 3 * 2)));
+                        tickdata.push(end);
+                        return tickdata;
+                    },
+                }}
+        )
+    }
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        },
+        legend: {
+            enabled: false,
+        },
+        exporting: {
+            enabled: false
+        },
+        credits: {
+            enabled: false // 禁用版权信息
+        },
+        chart: {
+            marginLeft: 3,
+            marginRight: 3,
+        },
+        title: {
+            text: '',
+        },
+        plotOptions: {
+            area: {
+                enableMouseTracking: false
+            },
+            line: {
+                enableMouseTracking: false
+            },
+            bar: {
+                enableMouseTracking: false
+            },
+            candlestick : {
+                color : 'green',
+                upColor : 'red',
+                lineColor: '#33AA11',
+                upLineColor: '#DD2200',
+            }
+
+
+
+        },
+        tooltip: {
+            enabled: true,
+        },
+        yAxis:{
+            showLastLabel: false,
+
+        },
+
+
+    });
+    function renderIt1M(areadata, linedata, lowermin) {
+        try{markY = linedata[0][1];}catch(e){markY = 0;}
+        lowermin = lowermin;
+        chart1 = new Highcharts.Chart('container', {
+            xAxis: {
+
+                type: 'datetime',
+                //tickInterval:000000,
+                showFirstLabel: true,
+                showEmpty:false,
+                labels: { //设置X轴各分类名称的样式style
+                    formatter: function() {
+                        var vDate = new Date(this.value);
+                        minutes = vDate.getMinutes();
+                        if(minutes < 10)minutes='0'+minutes;
+                        return vDate.getHours() + ":" + (minutes);
+                    }
+                },
+                gridLineWidth: 0.5,
+
+            },
+
+            yAxis: {
+
+                type: 'value',
+                title: {
+                    text: ''
+                },
+                labels: {
+                    x: -47,
+                    formatter: function(){
+                        return this.value.toFixed(length);  //保留小数
+                    }
+                },
+
+                tickPosition: 'inside',
+                gridLineWidth: 0.5,
+                opposite: true,
+                min: lowermin,
+                plotLines: [{
+                    color: 'red', //线的颜色，定义为红色
+                    dashStyle: 'solid', //默认值，这里定义为实线
+                    value: markY, //定义在那个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+                    width: 0, //标示线的宽度，2px
+                    label: {
+                        text: markY.toFixed(length), //标签的内容
+                        align: 'right', //标签的水平位置，水平居左,默认是水平居中center
+                        x: -10,
+                        y: -15,
+                        style: {
+                            color: 'red',
+                            backgroundColor: 'blur',
+                            width: 16,
+                            height: 40
+
+                        } //标签相对于被定位的位置水平偏移的像素，重新定位，水平居左10px
+                    }
+                }]
+            },
+
+            series: [{
+                type: 'area',
+                data: areadata,
+                lineWidth: 1,
+                lineColor: '#3186cd',
+                fillOpacity: 0.3,
+                animation: false
+
+            }, {
+                type: 'line',
+                data: linedata,
+                dashStyle: 'dash',
+                color: 'red',
+                lineWidth: 1,
+                animation: false
+            }]
+        });
+    }
+
+    function renderIt1D(data) {
+
+        bardata = [];
+        for (i = 0; i < data.length; i++) {
+            bardata.push([
+                eval(data[i][0]), // the date
+                data[i][1], // open
+                data[i][2], // high
+                data[i][3], // low
+                data[i][4] // close
+            ]);
+        }
+        chart1 = new Highcharts.Chart('container', {
+
+            yAxis: {
+                type: 'value',
+                title: {
+                    text: ''
+                },
+                labels: {
+                    x: -47,
+                    formatter: function(){
+                        return this.value.toFixed(length);  //保留小数
+                    }
+                },
+                gridLineWidth: 0.5,
+                opposite: true,
+            },
+            xAxis: {
+                type: 'datetime',
+                labels: { //设置X轴各分类名称的样式style
+                    formatter: function() {
+                        var vDate = new Date(this.value);
+                        return  (vDate.getMonth() + 1) + "-" + vDate.getDate();
+                    }
+                }
+            },
+            tooltip: {
+                enabled: false,
+                formatter: function() {
+                    var tip = "";
+                    // tip = this.points[0].series.name+"<br/> ";
+                    tip += Highcharts.dateFormat("%Y-%m-%d", this.point.x, false) + "<br/>";
+                    tip += "开盘价：" + this.point.open + "<br/>";
+                    tip += "收盘价：" + this.point.close + "<br/>";
+                    tip += "最高价：" + this.point.high + "<br/>";
+                    tip += "最低价：" + this.point.low + "<br/>";
+                    return tip;
+
+                }
+            },
+            series: [{
+                type: 'candlestick',
+                data: data,
+                lineWidth: 1,
+                fillOpacity: 0.3,
+                animation: false
+
+            }]
+        });
+    }
+
+    function renderItFullday(areadata, linedata, lowermin,breaks) {
+        try{
+            markY = linedata[0][1];
+        }catch(e){
+            markY = 0;
+        }
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+        chart1 = new Highcharts.Chart('container', {
+            xAxis: {
+                type: 'datetime',
+                showFirstLabel: true,
+                showEmpty:false,
+                labels: { //设置X轴各分类名称的样式style
+                    formatter: function() {
+                        var vDate = new Date(this.value);
+                        minutes = vDate.getMinutes();
+                        if(minutes < 10)minutes='0'+minutes;
+                        return vDate.getHours() + ":" + (minutes);
+                    }
+                },
+                gridLineWidth: 0.5,
+                breaks:breaks,
+            },
+
+            yAxis: {
+                type: 'value',
+                title: {
+                    text: ''
+                },
+                labels: {
+                    x: -47,
+                    formatter: function(){
+                        return this.value.toFixed(length);  //保留小数
+                    }
+                },
+                gridLineWidth: 0.5,
+                opposite: true,
+                min: lowermin,
+                plotLines: [{
+                    color: 'red', //线的颜色，定义为红色
+                    dashStyle: 'solid', //默认值，这里定义为实线
+                    value: markY, //定义在那个值上显示标示线，这里是在x轴上刻度为3的值处垂直化一条线
+                    width: 0, //标示线的宽度，2px
+                    label: {
+                        text: markY.toFixed(length), //标签的内容
+                        align: 'right', //标签的水平位置，水平居左,默认是水平居中center
+                        x: -10,
+                        y: -15,
+                        style: {
+                            color: 'red',
+                            backgroundColor: 'blur',
+                            width: 16,
+                            height: 40
+
+                        } //标签相对于被定位的位置水平偏移的像素，重新定位，水平居左10px
+                    }
+                }]
+
+
+            },
+            series: [{
+                type: 'area',
+                data: areadata,
+                lineWidth: 1,
+                lineColor: '#3186cd',
+                fillOpacity: 0.3,
+                animation: false,
+                marker:{
+                    enabled:false
+                }
+
+            }, {
+                type: 'line',
+                data: linedata,
+                dashStyle: 'dash',
+                color: 'red',
+                lineWidth: 1,
+                animation: false
+            }]
+        });
+    }
+
+    function Init1M() {
+        //$.getJSON('http://datas.org.cn/jsonp?filename=json/usdeur.json&callback=?', function (data) {
+
+        $.getJSON('http://chart.ronmei.com/kongying/f.php?StockCode={$code}&interval={$interval}&callback=?', function(objson) {
+            data = objson.data;
+            areadata = [];
+            linedata = [];
+            odata = data;
+            ain = 0;
+            lowermin = 1000000;
+            for (i = 0; i < data.length - 1; i++) {
+                if (data[i][2] == 'A') {
+                    areadata.push(data[i]);
+                    if (data[i][1] < lowermin) {
+                        lowermin = data[i][1];
+                    }
+                } else {
+                    linedata.push(data[i]);
+                }
+            }
+            renderIt1M(areadata, linedata, lowermin);
+
+        });
+    };
+
+    function Init1D() {
+        //$.getJSON('http://datas.org.cn/jsonp?filename=json/usdeur.json&callback=?', function (data) {
+        // http://chart.ronmei.com/kongying/bar.php?StockCode={$code}&callback=?
+        $.getJSON('http://chart.ronmei.com/chart/chart.php?Code={$code}&interval=1d&Rows=400&callback=?', function(jsondata) {
+            data = jsondata;
+            //data = jsondata.data;
+            renderIt1D(data);
+        });
+    };
+
+    function Initallday() {
+        //$.getJSON('http://datas.org.cn/jsonp?filename=json/usdeur.json&callback=?', function (data) {
+
+        $.getJSON('http://chart.ronmei.com/kongying/allday.php?StockCode={$code}&callback=?', function(jsondata) {
+
+            data = jsondata.data;
+            breaks = jsondata.breaks;
+            areadata = [];
+            linedata = [];
+            odata = data;
+            ain = 0;
+            lowermin = 1000000;
+            for (i = 0; i < data.length - 1; i++) {
+                if (data[i][2] == 'A') {
+                    areadata.push(data[i]);
+                    if (data[i][1] < lowermin) {
+                        lowermin = data[i][1];
+                    }
+                } else {
+                    linedata.push(data[i]);
+                }
+            }
+            renderItFullday(areadata, linedata, lowermin,breaks);
+            setInterval(Initallday, 30000);
+
+        });
+    };
+
+    function updateData1M(price) {
+        if(interval == '1' || interval == 'allday'){
+            for (var i = linedata.length - 1; i >= 0; i--) {
+                if (linedata[i][1])
+                    linedata[i][1] = price;
+            }
+            areadata[areadata.length - 1][1] = price;
+            if (price < lowermin) {
+                lowermin = price;
+            }
+        }
+        if(interval == '1'){
+            renderIt1M(areadata, linedata, lowermin);
+        }
+        else if(interval == 'allday'){
+            renderItFullday(areadata, linedata, lowermin,breaks);
+        }else if(interval == '1d'){
+            bardata[bardata.length - 1][4] = price;
+            if(bardata[bardata.length - 1][2] < price){
+                bardata[bardata.length - 1][2] = price;
+            }
+            if(bardata[bardata.length - 1][3] > price){
+                bardata[bardata.length - 1][3] = price;
+            }
+            renderIt1D(bardata);
+        }
+        //chart1.series[1].remove(false);
+
+    }
+
+
+    $(function() {
+        if (interval == '1') {
+            Init1M();
+            setInterval(Init1M, 30000);
+        } else if (interval == '1d') {
+            Init1D();
+        } else if(interval == 'allday'){
+            Initallday();
+        }
+    })
+</script>
+</body>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://zhongying.gwecaopan.com/mine/profile.html -->
+<html style="display: block;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,minimum-scale=1.0, maximum-scale=1.0">
+    <title>个人信息</title>
+
+    <meta name="keywords">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="__CSS__/merge-profile.css">
+
+    <script type="text/javascript">
+        var __baseDir = 'http://'+window.location.host+'/content/';
+    </script>
+    <!--tongdun-->
+    <!--tongdun end-->
+</head>
+<body>
+
+
+
+
+<div id="doc" class="doc page-mine">
+    <!-- 头部 -->
+    <header class="page-header">
+        <div class="content">
+            <h3>个人信息</h3>
+            <div class="left">
+                <a href="javascript:window.history.back();" class="iconfont go-back icon-xiangzuojiantou"></a>
+            </div>
+            <div class="right"></div>
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-mine-profile main-profile">
+
+        <div class="content">
+            <!--<div class="summary">
+                <span>安全级别</span>
+                <span class="mod-meter meter-lvl-5"></span>
+            </div>-->
+
+            <!--<div id="myName">-->
+                <!--<span class="icon-img iconfont icon-wo logoM"></span>-->
+                <!--<span class="nameM">昵称</span>-->
+                <!--<span class="iconfont arrow-right icon-xiangyoujiantou jiantou" id="jianT"></span>-->
+                <!--<span class="nameX">中盈20252</span>-->
+            <!--</div>-->
+
+            <ul class="mod-list mod-list-sample">
+                <!--<li>-->
+                    <!--<a href="http://zhongying.gwecaopan.com/account/realName.html">-->
+                        <!--<span class="icon-img iconfont text-s24 icon-shimingrenzheng" style="color:#da2f35;"></span>-->
+                        <!--<span>实名认证</span>-->
+                        <!--<span class="iconfont arrow-right text-s24 icon-xiangyoujiantou"></span>-->
+
+                        <!--<span class="right text-lesser">已填写</span>-->
+
+                    <!--</a>-->
+                <!--</li>-->
+                <li>
+                    <a href="{:U('User/bankinfo')}">
+                        <span class="icon-img iconfont text-s24 icon-yinhangka" style="color:#da2f35;"></span>
+                        <span>银行卡</span>
+                        <span class="iconfont arrow-right text-s24 icon-xiangyoujiantou"></span>
+                        <if condition="$result.banknumber eq ''">
+                        <span class="right text-lesser">未认证</span>
+                            <else/>
+                            <span class="right text-lesser">已填写</span>
+                        </if>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <span class="icon-img iconfont text-s28 icon-shouji" style="margin-left:-0.42rem;color:#da2f35;"></span>
+                        <span>手机认证</span>
+                        <span class="iconfont arrow-right text-s24 "></span>
+
+                        <span class="right text-lesser">{$tel.utel}</span>
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </section>
+
+    <div id="changeN" style="height: 793px;">
+        <div class="conten">
+            <div class="text">
+                <p>昵称(暂只支持修改一次)</p>
+                <input type="text" maxlength="10" class="nameI" placeholder="请输入少于10个字符">
+            </div>
+            <div class="btn">
+                <div class="qx">取消</div>
+                <div class="qd qd1">确定</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chang2" style="height: 793px;">
+        <p>昵称只支持修改一次</p>
+    </div>
+    <div class="float"><div class="content"><div class="overlay-top msgbox msgbox-info hide"><div class="content"><div class="main"></div><div class="action"><a href="javascript:void(0)" class="button ok">确定</a></div></div></div><div class="overlay-top msgbox msgbox-confirm hide"><div class="content"><div class="main"></div><div class="action clearfix"><div class="left"><a href="javascript:void(0)" class="button button-lesser no">取消</a></div><div class="right"><a href="javascript:void(0)" class="button ok">确定</a></div></div></div></div><div class="msgbox-toast hide"><div class="content"></div></div><div class="loading hide"><div class="content"><img src="./个人信息_files/01.gif"></div></div></div></div></div>
+
+</body></html>

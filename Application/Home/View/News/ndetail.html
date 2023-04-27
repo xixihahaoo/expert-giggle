@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size:100px">
+<head>
+ <include file="Common:header" />
+    <title>资讯详情</title>
+    <link rel="stylesheet" href="__CSS__/news.css">
+</head>
+
+<script>
+    (function(b){
+        var a={};
+        a.Html=b.getElementsByTagName("html")[0];
+        a.widthProportion=function(){
+            var c=(b.body&&b.body.clientWidth||a.Html.offsetWidth)/640;
+            return c>1?1:c
+        };
+        a.changePage=function(){
+            a.Html.setAttribute("style","font-size:"+a.widthProportion()*100+"px")
+        };
+        a.changePage();
+        setInterval(a.changePage,100)
+    })(document);
+</script>
+
+<body>
+    <header class="page-header">
+      <div class="content">
+        <div class="left">
+      <a class="back" href="javascript:window.history.back();">&nbsp;</a>
+              </div>
+              <h3 class="back " id="head-name">资讯详情</h3>
+          </div>
+    </header>
+<div class="newsDetail content" style="padding-top:0.8rem;">
+    <h1 class="title">{$new['title']}</h1>
+    <div class="bd">
+        <p class="inlineBox">
+            <span class="source">作者：{$new['Author']['nick']|default="暂无"}</span>
+            <span class="date">{$new.created_at}</span>
+        </p>
+        <p class="inlineBox fr">
+             <span class="cmt">阅读({$new['hits']})</span>
+        </p>
+    </div>
+    <div class="banner"></div>
+    
+    <empty name="new['text']">
+        <div class="newsAllContent">{$new['desc']}</div>
+    <else />
+        <div class="newsAllContent">{$new['text']}</div>
+    </empty>
+
+</div>
+
+<div class="zp-dialog">
+    <div class="zp-dialog-inner">
+        <div class="zp-content">
+        </div>
+        <div class="btn-container clearfix">
+            <a class="sure-btn" href="javascript:;">确定</a>
+        </div>
+    </div>
+</div>
+
+
+</body></html>

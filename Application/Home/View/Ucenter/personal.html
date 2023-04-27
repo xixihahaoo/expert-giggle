@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html style="display: block;"><head>
+    <title>个人信息 - {:config('s_domain_name')}{:config('webname')}</title>
+    <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/merge-profile.css">
+</head>
+<body>
+
+
+<div id="doc" class="doc page-mine">
+    <!-- 头部 -->
+    <header class="page-header">
+        <div class="content">
+            <h3>个人信息</h3>
+            <div class="left">
+                <a href="javascript:window.history.back();" class="iconfont go-back icon-xiangzuojiantou"></a>
+            </div>
+            <div class="right"></div>
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-mine-profile main-profile">
+        <div class="content">
+            <!--<div class="summary">
+                <span>安全级别</span>
+                <span class="mod-meter meter-lvl-5"></span>
+            </div>-->
+            
+            <a href="{:U('nickname')}">
+               <div id="myName">
+                    <span class="icon-img iconfont icon-wo logoM"></span>
+                    <span class="nameM">昵称</span>
+                    <span class="iconfont arrow-right icon-xiangyoujiantou jiantou" id="jianT"></span>
+                    <span class="nameX">{$user.nickname}</span>
+               </div>
+            </a>
+            
+            <ul class="mod-list mod-list-sample">
+<!--                 <li>
+                    <a href="http://zhongying.gwecaopan.com/account/realName.html">
+                        <span class="icon-img iconfont text-s24 icon-shimingrenzheng" style="color:#da2f35;"></span>
+                        <span>实名认证</span>
+                        <span class="iconfont arrow-right text-s24 icon-xiangyoujiantou"></span>
+
+                        <span class="right text-lesser">已填写</span>
+
+                    </a>$num = "13966778888"
+$str = substr_replace($num,'****',3,4);
+                </li> -->
+                <li>
+                    <a href="{:U('User/banks')}">
+                        <span class="icon-img iconfont text-s24 icon-yinhangka" style="color:#da2f35;"></span>
+                        <span>银行卡</span>
+                        <span class="iconfont arrow-right text-s24 icon-xiangyoujiantou"></span>
+                       <empty name="bank">
+                           <span class="right text-lesser">未绑定</span>
+                        <else />
+                           <span class="right text-lesser">已绑定</span>
+                       </empty>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;">
+                        <span class="icon-img iconfont text-s28 icon-shouji" style="margin-left:-0.42rem;color:#da2f35;"></span>
+                        <span>手机认证</span>
+                        <span class="iconfont arrow-right text-s24 "></span>
+
+                        <empty name="tel">
+                           <span class="right text-lesser">未认证</span>
+                        <else />
+                           <span class="right text-lesser">{$tel}</span>
+                       </empty>
+
+                    </a>
+                </li>
+    
+                <li>
+                    <a href="{:U('User/tradePwd')}">
+                        <span class="icon-img iconfont text-s24 icon-money" style="color:#da2f35;"></span>
+                        <span>提款密码</span>
+                        <span class="iconfont arrow-right text-s24 icon-xiangyoujiantou"></span>
+                        <empty name="user['trade_pwd']">
+                            <span class="right text-lesser">未设置</span>
+                            <else />
+                            <span class="right text-lesser">已设置</span>
+                        </empty>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{:U('User/loginPwd')}">
+                        <span class="icon-img iconfont text-s24 icon-denglumima" style="color:#da2f35;"></span>
+                        <span>登录密码</span>
+                        <span class="iconfont arrow-right text-s24 icon-xiangyoujiantou"></span>
+                        <span class="right text-lesser">******</span>
+                    </a>
+                </li>
+                
+                 
+            </ul>
+            
+        </div>
+    </section>
+</body>
+</html>

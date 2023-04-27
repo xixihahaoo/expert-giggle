@@ -1,0 +1,97 @@
+<include file="Common:layer_content_header" />
+
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            <i class="icon-double-angle-right"></i>
+            {$optionRs.capital_name}
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <form class="form-horizontal" role="form" id="id_form">
+                <input type="hidden" name="option_id" value="{$option_id}">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="">标签状态</label>
+                    <div class="col-sm-9">
+                        <label>
+                            <input name="option_special_type" value="1" <if condition="$type_id == 1">checked="checked"</if> class="ace" type="radio">
+                            <span class="lbl">无</span>
+                        </label>
+                        <label>
+                            <input name="option_special_type" value="2" <if condition="$type_id == 2">checked="checked"</if> class="ace" type="radio">
+                            <span class="lbl">新品</span>
+                        </label>
+                        <label>
+                            <input name="option_special_type" value="3" <if condition="$type_id == 3">checked="checked"</if> class="ace" type="radio">
+                            <span class="lbl">热门</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+                <div class="hr hr-24"></div>
+
+
+
+
+
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9 center">
+                        <button class="btn btn-info" id="submit_btn" type="button">
+                            <i class="icon-ok bigger-110"></i>
+                            确定
+                        </button>
+                    </div>
+                </div>
+
+
+
+            </form>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+<include file="Common:layer_content_footer" />
+
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function($) {
+
+    });
+
+    $('#submit_btn').bind('click', function(){
+        $.ajax({
+            type: "post",
+            url: "{:U('products/opt_edit_special_info')}",
+            data:$("#id_form").serialize(),
+            success: function(data) {
+                console.log(data);
+                if(data.status == 1)
+                {
+                    alert('保存成功');
+                    parent.location.reload();
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);
+                }
+                else
+                {
+                    alert(data.ret_msg);
+                }
+
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        })
+    });
+</script>
+
+
+
+<script src="__PUBACE__/assets/js/ace-elements.min.js"></script>
+<script src="__PUBACE__/assets/js/ace.min.js"></script>

@@ -1,0 +1,124 @@
+<include file="Common:header_f" />
+<include file="Common:main_container_header_f" />
+
+
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            代理
+            <small>
+                <i class="icon-double-angle-right"></i>
+                经纪人列表
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="table-header">
+                        经纪人列表&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="table-responsive">
+                        <div role="grid" class="dataTables_wrapper" id="sample-table-2_wrapper">
+                            <table id="sample-table-2" class="table table-striped table-bordered table-hover dataTable">
+                                <thead>
+                                <tr>
+                                    <th class="center">用户id</th>
+                                    <th>用户昵称</th>
+                                    <th>用户姓名</th>
+                                    <th>父推广员id</th>
+                                    <th>父推广员手机号</th>
+                                    <th>现金余额</th>
+                                    <th>积分余额</th>
+                                    <th>累计存入（现金）</th>
+                                    <th>累计手续费</th>
+                                    <th>注册时间</th>
+                                    <th>最后登陆</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <volist name="userInfo" id="v">
+                                <tr>
+                                    <td class="center"><a target="_blank" href="{:U('agent_detail')}?agent_id={$v.uid}">{$v.uid}</a></td>
+                                    <td>{$v.username}</td>
+                                    <td>{$v.uid}</td>
+                                    <td>{$v.uid}</td>
+                                    <td>{$v.uid}</td>
+                                    <td>
+                                        {$v.uid}
+                                    </td>
+                                    <td>{$v.uid}</td>
+                                    <td>{$v.uid}</td>
+                                    <td>{$v.uid}</td>
+                                    <td>{$v.create_date}</td>
+                                    <td>{$v.last_login}</td>
+                                </tr>
+                                </volist>
+
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="dataTables_info" id="sample-table-2_info">共<b class="orange">{$totalCount}</b>，当前显示第 <b class="orange">{$nowStart}</b>到<b class="orange">{$nowEnd}</b></div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="dataTables_paginate paging_bootstrap">
+                                        <ul class="pagination">
+                                            {$pageShow}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end id sample-table-2_wrapper-->
+                    </div>
+                    <!-- end table-responsive -->
+                </div>
+            </div>
+            <div class="space-20"></div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+
+<include file="Common:main_container_footer" />
+<include file="Common:footer_basic_base" />
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+
+<!-- page specific plugin scripts -->
+
+<!--[if lte IE 8]>
+<script src="__PUBACE__/assets/js/excanvas.min.js"></script>
+<![endif]-->
+
+<script src="__PUBACE__/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.slimscroll.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.easy-pie-chart.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.sparkline.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.pie.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.resize.min.js"></script>
+
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function($) {
+
+    });
+</script>
+
+<include file="Common:footer_ace_base" />
+<include file="Common:footer" />

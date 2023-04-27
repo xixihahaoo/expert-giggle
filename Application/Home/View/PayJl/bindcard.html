@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>账号信息</title>
+    <include file="Common:header" />
+	<link rel="stylesheet" href="__CSS__/merge1.css">
+
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+
+	<style type="text/css">
+		.formtips{
+			text-align:center;
+			width: 100%;
+		}
+
+        .mod-list>li {
+            border-bottom: 1px solid #ededed;
+        }
+
+        .mod-list>li:after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: -50%;
+            width: 200%;
+            height: 0px;
+            background: #ededed;
+            -webkit-transform: scale(0.5);
+        }
+	</style>
+</head>
+<body>
+	<header class="page-header">
+		<div class="content">
+			<h3>账号信息</h3>
+			<div class="left">
+				<a href="javascript:window.history.back()" class="iconfont go-back icon-youjiantou" id="back"></a>
+			</div>
+		</div>
+	</header>
+
+	<!-- 内容 -->
+	<section class="page-main main-user main-smscode main-user-register">
+		<form id="reviseForm" class="content" method="post">
+
+			<div class="step step1">
+				<ul class="mod-list">
+
+					<li class="clearfix">
+						<label class="left">手机号</label>
+						<input id="c-pho" name="mobile" class="left input mobile" maxlength="11" placeholder="请输入手机号" type="tel">
+					</li>
+
+					<li class="clearfix">
+						<label class="left">身份证</label>
+						<input name="idCard" id="n-pwd" class="left input" placeholder="请输入身份证号码" type="text">
+					</li>
+
+					<li class="clearfix">
+						<label class="left">姓名</label>
+						<input name="name" id="n-pwd" class="left input" placeholder="请输入真实姓名" type="text">
+					</li>
+
+					<li class="clearfix">
+						<label class="left">银行卡号</label>
+						<input name="bankCard" id="n-pwd" class="left input" placeholder="请输入银行卡号" type="text">
+					</li>
+
+					</li>
+				 </ul>
+			</div>
+		</form>
+		<a class="login-btn do-login" id="send" style="width: 90%">下一步</a>
+	</section>
+</body>
+</html>
+
+<script type="text/javascript">
+
+$("#send").click(function(){
+
+	var index = layer.load(1, {
+		shade: [0.1,'#fff'] //0.1透明度的白色背景
+	});
+
+	var numbers = /^1\d{10}$/;
+	var mobile   = $(".mobile").val().replace(/\s+/g,""); //手机号
+	if(!numbers.test(mobile) || mobile.length ==0){
+
+		layer.close(index);              	     
+		layer.msg('手机号码格式错误');
+		return false;
+	}
+
+	$.ajax({
+		url:"{:U('bindCard')}",
+		dataType: 'json',
+		type: 'post',
+		data: $('#reviseForm').serialize(),
+		success:function(data){
+
+			if(data.status === 0){
+
+				layer.close(index);
+				layer.msg(data.msg);
+				return false;
+			}
+
+			if(data.status === 1){
+
+				layer.close(index);
+				layer.msg(data.msg);
+				window.setTimeout("window.location='{:U('unbindBank')}'",1000);
+				return false;
+			}
+		},
+		error: function(request) {
+           	console.log(request);
+        },
+	});
+
+});
+</script>

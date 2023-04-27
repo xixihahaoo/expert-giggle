@@ -1,0 +1,191 @@
+<extend name="Base/common"/>
+<block name="content">
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href="__CSS__/compiled/user-list.css" type="text/css" media="screen">
+    <link rel="stylesheet" type="text/css" href="__CSS__/layerui/css/layui.css">
+    <script src="__JS__/theme.js"></script>
+    <script type="text/javascript" src="__PUBJS__/layer/layer.js"></script>
+
+    <div class="container-fluid">
+        <div id="pad-wrapper" class="users-list">
+            <div class="row-fluid header" style="margin-bottom: 10px">
+                <form id="form1" action="__URL__/index" method="get">
+                    <h3 style="height: 40px; width: 100%;font-size: 24px;">特别运营</h3>
+                    <div class="span10 pull-left">
+                        <div class="tpsearch" style="width: 20%">
+                            手机号：<input type="text" class="span6 search" value="{$sea.utel}" placeholder="请输入手机号" name="utel" id="utel"/>
+                        </div>
+                        <div class="tpsearch"  style="width: 20%">
+                            用户名称：<input type="text" value="{$sea.username}" class="span6 search" placeholder="请输入用户名称查找..." name="username" id="username"/>
+                        </div>
+
+                    </div>
+                    <div class="tpsearch" style="width:12%;float:right">
+                        <a href="javascript:void(0)" class="btn-flat info" onclick="submit()">开始查找</a>
+                        <a href="javascript:void(0)" class="btn-flat info" onclick="sub()">查找导出</a>
+                    </div>
+                </form>
+            </div>
+            <!-- Users table -->
+            <div class="row-fluid table layui-table">
+                <table class="table table-hover layui-table">
+                    <thead>
+                    <tr>
+                        <th class="span1 sortable">
+                            编号
+                        </th>
+                        <th class="span2 sortable">
+                            <span class="line"></span>用户名
+                        </th>
+                        <th class="span2 sortable">
+                            <span class="line"></span>手机号
+                        </th>
+                        <th class="span2 sortable">
+                            <span class="line"></span>注册时间
+                        </th>
+                        <th class="span2 sortable">
+                            <span class="line"></span>登陆ip
+                        </th>
+                        <th class="span2 sortable">
+                            <span class="line"></span>运营中心
+                        </th>
+                        <th class="span2 sortable">
+                            <span class="line"></span>操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="ajaxback">
+                    <volist name="data" id="vo">
+                        <!-- row -->
+                        <tr class="first">
+                            <td>
+                                {$vo['uid']}
+                            </td>
+
+                            <td>
+                                {$vo['username']}
+                            </td>
+
+                            <td>
+                                {$vo['utel']}
+                            </td>
+
+                            <td>
+                                {$vo.utime|date='Y-m-d H:i:s',###}
+                            </td>
+
+                            <td>
+                                {$vo.last_login_ip}
+                            </td>
+
+                            <td>
+                               <button class="layui-btn layui-btn-primary layui-btn-small"  onclick="product({$vo['uid']})" title="查看运营中心"><i class="layui-icon"></i></button>
+                            </td>
+
+                            <td>
+                            <a href="{:U('user/resetpwd/',array('uid'=>$vo['uid']))}" class="layui-btn layui-btn-normal layui-btn-mini">重置密码</a>
+                                <a href="javascript:void(0)" class="del layui-btn layui-btn-mini layui-btn-danger"  data-id="{$vo['uid']}">删除</a>
+                            </td>
+
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <div class="qjcz">
+                    <span style="margin-right:30px;float:right">总运营分部：<i style="color:red">{$sea.count}个</i><br></span>
+                </div>
+            </div>
+            <div class="pagination pull-right">
+                <ul>
+                    {$page}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- scripts -->
+    <script src="__JS__/jquery-latest.js"></script>
+    <script src="__JS__/bootstrap.min.js"></script>
+    <script src="__JS__/bootstrap.datepicker.js"></script>
+    <script src="__JS__/theme.js"></script>
+    <script type="text/javascript" src="__PUBJS__/layer/layer.js"></script>
+    <script type="text/javascript">
+
+        $(".del").click(function(){
+
+            var uid = $(this).attr('data-id');
+            //询问框
+            layer.open({
+                content: '您确定要删除吗？'
+                ,btn: ['确定', '不要']
+                ,yes: function(index){
+                    
+                    $.ajax({
+                        url:"{:U('branch_del')}",
+                        type:"post",
+                        dataType:"json",
+                        data:{'uid':uid},
+                        success:function(data){
+                            if(data.status === 0){
+
+                                layer.msg(data.msg);
+                                return false;
+                            } else {
+
+                                layer.msg(data.msg);
+                                top.location.reload();
+                                return false;
+                            }
+
+                        }
+                    });
+                    layer.close(index);
+                }
+            });
+        });
+    </script>
+
+<script type="text/javascript">
+    var eqli = $("#dashboard-menu").children().eq(9);
+    eqli.attr('class','active');
+    $("#dashboard-menu .active .submenu").css("display","block");
+
+    function sub()
+    {
+        $('#form1').attr("action","__URL__/daochu");
+        $('#form1').submit();
+    }
+
+    function submit() {
+
+        $('#form1').attr("action","__URL__/index");
+        $('#form1').submit();
+    }
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    var eqli = $("#dashboard-menu").children().eq(9);
+    eqli.attr('class','active');
+    $("#dashboard-menu .active .submenu").css("display","block");
+});
+
+/*运营中心查看*/
+function product(uid)
+{
+    layer.open({
+            type: 2,
+            area: ['80%', '80%'],
+            fixed: true, //不固定
+            maxmin: true,
+            title: "运营中心",
+            content: ["{:U('show_operate')}?uid="+uid, 'no'],
+            end: function () {
+             //   top.location.reload();
+            }
+
+    });
+}
+</script>
+</block>

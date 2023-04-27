@@ -1,0 +1,228 @@
+<div class="main-container-inner">
+    <a class="menu-toggler" id="menu-toggler" href="#">
+        <span class="menu-text"></span>
+    </a>
+
+    <div class="sidebar" id="sidebar">
+        <script type="text/javascript">
+            try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+        </script>
+
+        <!--div class="sidebar-shortcuts" id="sidebar-shortcuts">
+            <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                <button class="btn btn-success">
+                    <i class="icon-signal"></i>
+                </button>
+
+                <button class="btn btn-info">
+                    <i class="icon-pencil"></i>
+                </button>
+
+                <button class="btn btn-warning">
+                    <i class="icon-group"></i>
+                </button>
+
+                <button class="btn btn-danger">
+                    <i class="icon-cogs"></i>
+                </button>
+            </div>
+        </div><!-- #sidebar-shortcuts -->
+
+        <ul class="nav nav-list">
+            <li <if condition="($nowMenu eq 'index') and ($nowAct eq 'index')">class="active"</if>>
+                <a href="{:U('index/index')}">
+                    <i class="icon-dashboard"></i>
+                    <span class="menu-text"> 控制台 </span>
+                </a>
+            </li>
+
+            <!-- 运营中心 -->
+            <li <if condition="($nowMenu eq 'operate')">class="active open"</if>>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-user"></i>
+                <span class="menu-text">运营中心</span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+
+            <ul class="submenu">
+                <li <if condition="$nowAct eq 'index'">class="active"</if>>
+                <a href="/Branch/Operate/index">
+                    <i class="icon-double-angle-right"></i>
+                    运营中心列表
+                </a>
+                </li>
+
+                <li <if condition="$nowAct eq 'money_flow'">class="active"</if>>
+                <a href="/Branch/Operate/money_flow">
+                    <i class="icon-double-angle-right"></i>
+                    资金流水
+                </a>
+                </li>
+            </ul>
+            </li>
+
+            <!-- 机构 -->
+            <li <if condition="($nowMenu eq 'agent')">class="active open"</if>>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-user"></i>
+                <span class="menu-text">机构管理</span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+
+            <ul class="submenu">
+                <li <if condition="$nowAct eq 'index'">class="active"</if>>
+                <a href="/Branch/agent/index">
+                    <i class="icon-double-angle-right"></i>
+                    机构列表
+                </a>
+                </li>
+            </ul>
+            </li>
+
+            <!-- 用户 -->
+            <li <if condition="($nowMenu eq 'user')">class="active open"</if>>
+                <a href="#" class="dropdown-toggle">
+                    <i class="icon-group"></i>
+                    <span class="menu-text">用户管理</span>
+
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+                    <li <if condition="($nowAct eq 'user_list') or ($nowAct eq 'user_detail')">class="active"</if>>
+                        <a href="/Branch/user/user_list">
+                            <i class="icon-double-angle-right"></i>
+                            用户列表
+                        </a>
+                    </li>
+                    <li <if condition="($nowAct eq 'money_flow') or ($nowAct eq 'money_flow')">class="active"</if>>
+                        <a href="/Branch/user/money_flow">
+                            <i class="icon-double-angle-right"></i>
+                            用户资金流水
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- 订单 -->
+            <li <if condition="$nowMenu eq 'order' ">class="active open"</if>>
+                <a href="#" class="dropdown-toggle">
+                    <i class="icon-hdd"></i>
+                    <span class="menu-text"> 订单管理 </span>
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+                    <li <if condition="$nowAct eq 'cash_list' ">class="active"</if>>
+                        <a href="/Branch/order/cash_list">
+                            <i class="icon-double-angle-right"></i>
+                            现金订单
+                        </a>
+                    </li>
+                    <li <if condition="$nowAct eq 'order_list_gold' ">class="active"</if>>
+                        <a href="/Branch/order/order_list_gold">
+                            <i class="icon-double-angle-right"></i>
+                            积分订单
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- 持仓管理 -->
+            <li <if condition="$nowMenu eq 'positionf' ">class="active open"</if>>
+                <a href="#" class="dropdown-toggle">
+                    <i class="icon-cog"></i>
+                    <span class="menu-text"> 持仓管理 </span>
+
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+                    <li <if condition="$nowAct eq 'tlist' ">class="active"</if>>
+                    <a href="/Branch/positionf/tlist">
+                        <i class="icon-double-angle-right"></i>
+                        持仓监控
+                    </a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <!-- 系统管理 -->
+            <li <if condition="$nowMenu eq 'relship' ">class="active open"</if>>
+                <a href="#" class="dropdown-toggle">
+                    <i class="icon-cog"></i>
+                    <span class="menu-text"> 推广管理 </span>
+
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+                    <li <if condition="$nowAct eq 'relship_commission_list' ">class="active"</if>>
+                    <a href="/Branch/relship/relship_commission_list">
+                        <i class="icon-double-angle-right"></i>
+                        佣金流水
+                    </a>
+                    </li>
+                    <li <if condition="$nowAct eq 'relship_list' ">class="active"</if>>
+                    <a href="/Branch/relship/relship_list">
+                        <i class="icon-double-angle-right"></i>
+                        推广员列表
+                    </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- 用户 -->
+            <li <if condition="($nowMenu eq 'proxy')">class="active open"</if>>
+                <a href="#" class="dropdown-toggle">
+                    <i class="icon-group"></i>
+                    <span class="menu-text">系统配置</span>
+
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+                    <li <if condition="$nowAct eq 'sys_info' ">class="active"</if>>
+                    <a href="/Branch/proxy/sys_info">
+                        <i class="icon-double-angle-right"></i>
+                        系统信息
+                    </a>
+                    </li>
+                    <li <if condition="$nowAct eq 'change_password' ">class="active"</if>>
+                    <a href="/Branch/proxy/change_password">
+                        <i class="icon-double-angle-right"></i>
+                        密码修改
+                    </a>
+                    </li>
+                </ul>
+            </li>
+            
+        </ul><!-- /.nav-list -->
+
+        <div class="sidebar-collapse" id="sidebar-collapse">
+            <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+        </div>
+
+        <script type="text/javascript">
+            try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+        </script>
+    </div>
+
+    <div class="main-content">
+        <!--div class="breadcrumbs" id="breadcrumbs">
+            <script type="text/javascript">
+                try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home home-icon"></i>
+                    <a href="#">首页</a>
+                </li>
+                <li class="active">控制台</li>
+            </ul><!-- .breadcrumb -->
+        <!--/div>
+        <!--end breadcrumbs-->

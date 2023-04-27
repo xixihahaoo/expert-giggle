@@ -1,0 +1,130 @@
+<include file="Common:header_s" />
+<include file="Common:main_container_header_s" />
+
+
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            订单
+            <small>
+                <i class="icon-double-angle-right"></i>
+                现金订单列表
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="table-header">
+                        现金订单列表&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="table-responsive">
+                        <div role="grid" class="dataTables_wrapper" id="sample-table-2_wrapper">
+                            <table id="sample-table-2" class="table table-striped table-bordered table-hover dataTable">
+                                <thead>
+                                <tr>
+                                    <th class="center">订单id</th>
+                                    <th>用户昵称</th>
+                                    <th>手机号码</th>
+                                    <th>商品</th>
+                                    <th>方向</th>
+                                    <th>保证金</th>
+                                    <th>手续费</th>
+                                    <th>买入价</th>
+                                    <th>卖出价</th>
+                                    <th>止损金额</th>
+                                    <th>止盈金额</th>
+                                    <th>浮动盈亏</th>
+                                    <th>结算盈亏</th>
+                                    <th>推广佣金(一级/二级)</th>
+                                    <th>订单状态</th>
+                                    <th>买入时间</th>
+                                    <th>卖出时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="orderRs" id="v">
+                                    <tr>
+                                        <td class="center"><a target="_blank" href="{:U('order_detail')}?order_id={$v.oid}">{$v.oid}</a></td>
+                                        <td><a target="_blank" href="{:U('Userf/user_detail')}?user_id={$v.uid}">
+                                        <if condition="$v['busername']">
+                                        {$v.busername}
+                                        <else />
+                                        {$v.u_name}
+                                        </if>
+                                        <td>{$v.utel}</td>
+                                        <td>{$v.option_name}</td>
+                                        <td>{$v.style_n}</td>
+                                        <td>{$v.Bond}</td>
+                                        <td>{$v.fee}</td>
+                                        <td>{$v.buyprice}</td>
+                                        <td>{$v.sellprice}</td>
+                                        <td>{$v.endloss}</td>
+                                        <td>{$v.endprofit}</td>
+                                        <td>{$v.money_float}</td>
+                                        <td>{$v.money_finish}</td>
+                                        <td class="center">{$v.fee_s}</td>
+                                        <td>{$v.status_n}</td>
+                                        <td>{$v.buy_date}</td>
+                                        <td>{$v.sell_date}</td>
+                                    </tr>
+                                </volist>
+
+
+
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="dataTables_info" id="sample-table-2_info">共<b class="orange">{$totalCount}</b>，当前显示第 <b class="orange">{$nowStart}</b>到<b class="orange">{$nowEnd}</b></div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="dataTables_paginate paging_bootstrap">
+                                        <ul class="pagination">
+                                            {$pageShow}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end id sample-table-2_wrapper-->
+                    </div>
+                    <!-- end table-responsive -->
+                </div>
+            </div>
+
+
+            <div class="space-20"></div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+
+<include file="Common:main_container_footer" />
+<include file="Common:footer_basic_base" />
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+
+<!-- page specific plugin scripts -->
+
+<script type="text/javascript" src="__PUBJS__/layer/layer.js"></script>
+
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function($) {
+
+    });
+
+</script>
+
+<include file="Common:footer_ace_base" />
+<include file="Common:footer" />

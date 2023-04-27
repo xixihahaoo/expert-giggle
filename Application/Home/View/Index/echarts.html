@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="height:400px"></div>
+    <!-- ECharts单文件引入 -->
+<!--     <script typet="text/javascript" src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="echarts.min.js"></script> -->
+
+<script src="__JS__/2.1.1-rc2jq/jquery.min.js"></script>
+<script src="__JS__/echarts.min.js"></script>
+ </body>
+
+ <script type="text/javascript">
+
+
+var code     = '{$code}';
+var interval = '{$interval}';
+
+var myChart = echarts.init(document.getElementById('main'));  
+window.onresize = myChart.resize;
+   
+setInterval(function(){
+$.get("{:U('echartsajax')}",{code:code, interval: interval}, function (item) {
+
+var     date = item.time;  //时间
+var     data = item.data;  //数据
+var new_data = item.new_data; //最新数据 
+
+     if(interval == 1){    //分时图
+
+           hour(date,data,new_data);
+     }
+      else if(interval == '1d'){   //日线图
+         
+           rixian(date,data);
+        
+     }  else {   //闪电图
+         
+           stepline(date,data,new_data);
+        
+     } 
+
+});
+},1000);
+
+
+//初始化
+$.get("{:U('echartsajax')}",{code:code, interval: interval}, function (item) {
+
+var     date = item.time;  //时间
+var     data = item.data;  //数据
+var new_data = item.new_data; //最新数据 
+
+     if(interval == 1){
+
+           hour(date,data,new_data);
+     }
+      else if(interval == '1d'){
+         
+           rixian(date,data);
+         
+     }  else{
+         
+           stepline(date,data);
+         
+     }
+
+});
+
+
+//分时图
+function hour(date,data,new_data){
+option = {
+    animation:true,  //去除动画 false
+    tooltip: {
+        trigger: 'axis',
+        // position: function (pt) {
+        //     return [pt[0], '10%'];
+        // }
+    },
+     grid: {
+        left: '1%',
+        containLabel: true
+    },
+    legend: {
+        top: 'bottom',
+        data:['意向'],
+    },
+    toolbox: {    //右上角组件
+    	show:false,
+        feature: {
+            dataZoom: {
+                yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        splitLine:{show: true},//去除网格线
+       // splitArea : {show : true},//保留网格区域
+        type: 'category',
+        boundaryGap: false,
+        data: date
+    },
+    yAxis: {
+        splitLine:{show: true},//去除网格线
+       // splitArea : {show : true},//保留网格区域
+        type: 'value',
+        boundaryGap: [0, '100%'], 
+        min:'dataMin',   //从最高值 到最低值开始
+        max:'dataMax',
+        // scale:true
+        position:'right'
+    },
+    dataZoom : {
+        show : false,  //不现实
+        realtime: true,
+        start : 0,
+        end : 100
+    },
+
+    series: [
+        {
+            name:'当前价格',
+            type:'line',
+            smooth:true,
+            symbol: 'none',
+            sampling: 'average',
+            itemStyle: {
+                normal: {
+                    color: 'rgb(255, 70, 131)',
+                }
+            },
+            areaStyle: {
+                normal: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {                           //颜色渐变
+                        offset: 0,
+                        color: 'rgba(40, 182, 252,0.85)'
+                    }, {
+                        offset: 1,
+                        color: 'rgba(28, 159, 255,0.2)'
+                    }
+                    ])
+                }
+            },
+            data:data,
+            markLine: {              //平行线
+                silent: false,
+                itemStyle:{
+                  normal:{lineStyle:{type:'solid',color:'red',width:'1'},label:{show:true}}
+                 },
+                data: [{
+                    yAxis: new_data
+                }],
+                precision:2   //不显示小数点
+            },
+
+            lineStyle: {     //去掉边框，加入阴影
+                normal: {
+                 type: 'solid',
+                 /*color:"#28a5fc",*/
+                 color:"#00f",
+                  opacity :"0.5"
+
+                },
+ 
+             }
+
+        },
+    ]
+};
+
+// 为echarts对象加载数据 
+myChart.setOption(option); 
+
+}
+
+
+//日线图
+
+function rixian(date,data){
+
+  option = {
+    tooltip : {
+        trigger: 'axis',
+        formatter: function (params) {
+            var res = params[0].seriesName + ' ' + params[0].name;
+            res += '<br/>  开盘 : ' + params[0].value[0] + '  最高 : ' + params[0].value[3];
+            res += '<br/>  收盘 : ' + params[0].value[1] + '  最低 : ' + params[0].value[2];
+            return res;
+        }
+    },
+    toolbox: {
+        show : false,
+        feature : {
+            mark : {show: true},
+            dataZoom : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    dataZoom : {
+        show : false,
+        realtime: true,
+        start : 50,
+        end : 100
+    },
+    xAxis : [
+        {
+            type : 'category',
+            boundaryGap : true,
+            axisTick: {onGap:false},
+            splitLine: {show:false},
+            data : date,
+            axisLabel :{     //x轴坐标显示
+                interval:3              
+            }  
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            scale:true,
+            boundaryGap: [0.01, 0.01]
+        }
+    ],
+    series : [
+        {
+            name:'日期',
+            type:'k',
+            data:data
+        }
+      
+    ]
+};
+
+    // 为echarts对象加载数据 
+    myChart.setOption(option); 
+
+}
+
+
+function stepline(date,data,new_data){
+
+
+    option = {
+
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['Step Start', 'Step Middle', 'Step End']
+    },
+    grid: {
+        left: '0.1%',   
+        // right: '4%', //距离边框的距离
+        bottom: '3%',
+        containLabel: true
+    },
+    // toolbox: {     //保存图像
+    //     feature: {
+    //         saveAsImage: {}
+    //     }
+    // },
+    xAxis: {
+        splitLine:{show: true},//去除网格线
+        type: 'category',
+        data: date
+    },
+    yAxis: {
+        type: 'value',
+        scale:true    //刻度不从0开始
+    },
+    series: [
+        {
+            name:'当前价格',
+            type:'line',
+            step: 'start',
+            data:data,
+            markLine: {
+                silent: false,
+                itemStyle:{
+                  normal:{lineStyle:{type:'dotted',color:'red',width:'1px'},label:{show:true}}
+                 },
+                data: [{
+                    yAxis: new_data
+                }],
+                precision:2   //不显示小数点
+            }
+        }
+    ]
+};
+
+// 为echarts对象加载数据 
+myChart.setOption(option); 
+
+}
+
+//  setInterval(function(){
+
+//     var aa = [Math.random() * 300];
+//             $.ajax({
+//                 url: "{:U('Index/echartsajax')}",
+//                 dataType: 'json',
+//                 type: 'get',
+//                 data: 'code='+code+'',
+//                 success: function (data) {                       
+                          
+//                           var price = data.Price;
+
+//                             myChart.setOption({  
+//                             series: [{  
+//                                 // 根据名字对应到相应的系列  
+//                                 name: '最新价格',
+//                                 markLine: {
+//                                 silent: false,
+//                                 data: [{
+//                                     yAxis: price
+//                                 }]
+//                             }
+
+//                             }]  
+//                         });  
+
+//                 }
+
+
+//         });
+   
+// },1000);
+
+
+
+ </script>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html style="display: block;">
+<head>
+    <include file="Common:header" />
+    <title class="productName">{:config('s_domain_name')}{:config('webname')}</title>
+
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="__CSS__/index_merge.css">
+    <script typet="text/javascript" src="__JS__/1.8.3jq/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+    <!--da fan ge-->
+    <!--<script type="text/javascript" src="__JS__/jquery.event.drag-1.5.min.js"></script>-->
+    <script type="text/javascript" src="__JS__/jquery.touchSlider.js"></script>
+</head>
+
+<style type="text/css">
+.red{color: red;}
+.green{color: #17b03e;}
+.layui-m-layercont p img{width: 100%;}
+</style>
+
+<body>
+<div id="doc" class="doc page-home" data-url-query-index="/quote">
+    <!-- 头部 -->
+    <header class="page-header">
+        <div class="content">
+            <h3 class="productName">{:config('s_domain_name')}{:config('webname')}</h3>
+<!--             <div class="right">
+                <a id="login" href="{:U('newtrader')}">新手?</a>
+            </div> -->
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-home" style="padding-top:0.5rem;">
+    <input type="hidden" value="{$Think.session.user_id}" id="user_id">
+
+        <div class="content">
+
+                <!-- 图片传送带 -->
+     <div class="mod-carousel">
+                <!--轮播-->
+                <!--<ul class="clearfix">-->
+                   <!--<volist name="news" id="vo">-->
+                     <!--<li>-->
+                         <!--<a href="{:U('newtrader',array('nid' => $vo['nid']))}">-->
+                             <!--<img src="../../Uploads/{$vo.ncover}">-->
+                         <!--</a>-->
+                     <!--</li>-->
+                     <!--</volist>-->
+                <!--</ul>-->
+         <!--图论-->
+         <div class="main_visual">
+            <div class="flicking_con">
+                <volist name="news" id="vo">
+                       <a href="#"></a>
+                </volist>
+            </div>
+             <div class="main_image">
+                 <ul>
+                  <volist name="news" id="vo">
+                    <a href="{:U('newtrader',array('nid' => $vo['nid']))}">
+                      <li><span class="img_3"><img src="../../Uploads/{$vo.ncover}"></span></li>
+                    </a>
+                  </volist>
+                 </ul>
+                 <a href="javascript:;" id="btn_prev" style="display: none"></a>
+                 <a href="javascript:;" id="btn_next" style="display: none"></a>
+             </div>
+         </div>
+                <div class="clearfix"></div>
+            </div>
+        <!-- 图片传送带 -->
+<!--           <div id="onLine">
+                <div class="onMain">
+                    <div class="line_left" id="rank"><a href="" style="color:#da2f35; display:block; width:0.9rem; height:0.21rem; margin-top:0.05rem"><font style="color: #000">当前在线</font>{$users_online}<font style="color: #000">人</font></a></div>
+
+                    <ul class="line_right">
+
+                    <li style="top: -0.35rem;">***39<span> 12:15 </span><span style="color:#17b03e">做空</span><span> 美原油</span></li><li style="top: -0.35rem;">***88<span> 12:15 </span><span style="color:#17b03e">做空</span><span> 美原油</span></li><li style="top: 0px;">***23<span> 12:15 </span><span style="color:#17b03e">做空</span><span> 美原油</span></li><li>***02<span> 12:15 </span><span style="color:#d0402d">做多</span><span> 美原油</span></li><li>***93<span> 12:15 </span><span style="color:#d0402d">做多</span><span> 美原油</span></li>
+                    </ul>
+                </div>
+            </div> -->
+
+            <div class="marketing">
+                <ul class="indexList">
+
+                  <li id="service">
+                        <a href="{:U('newtrader')}" id="tuig" class="clearfix">
+                            <span class="icon-icon_ad2 index-icon"></span>
+                            <p class="left">
+                            </p><div class="text-s18">新手指引</div>
+                            <p></p>
+                        </a>
+                    </li>
+                <if condition="$trade eq 1">
+                    <li class="">
+                        <i class="icon-chicang chicang "></i>
+                            <a href="{:U('Simulation/index')}" class="czhongying.gwecaopan.comlearfix">
+                            <span class="icon-moni index-icon"></span>
+                            <p class="left">
+                            </p><div class="text-s18">模拟交易</div>
+                            <p></p>
+                        </a>
+                    </li>
+                </if>
+
+                    <li id="service">
+                        <if condition="$user['code'] eq ''">
+                            <a id="extension" class="clearfix">
+                        <else />
+                            <a href="{:U('User/extension')}" id="tuig" class="clearfix">
+                        </if>
+                            <span class="icon-icon_ad index-icon"></span>
+                            <p class="left">
+                            </p><div class="text-s18">推广赚钱</div>
+                            <p></p>
+
+                        </a>
+                    </li>
+
+                    <li id="service">
+
+                        <a href="tel:{:config('utel')}" id="tuig" class="clearfix">
+                            <span class="icon-kefu index-icon"></span>
+                            <p class="left">
+                            </p><div class="text-s18">联系我们</div>
+                            <p></p>
+
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- 0428 end-->
+            <!--实盘交易开始-->
+            <div class="bargainTitle">
+                <div>实盘交易</div>
+            </div>
+            <!--实盘交易结束-->
+        <div class="mod-hot">
+         <foreach name="result" item="lt" key="k">
+                <div class="tradeType" id="gupji">{$k}</div>
+                <ul class="mod-list hot-comm-list" id="hot-comm-list">
+             <volist name="lt" id="vo">
+             <input type="hidden" class="capital_key" value="{$vo.capital_key}">
+             <input type="hidden" id="length{$vo.capital_key}" value="{$vo.capital_length}">
+
+            <if condition="$vo['global_flag'] eq 1">
+               <li class="tradeList" tradeid="HSI">
+                    <a href="{:U('product',array('id'=>$vo['id']))}">
+                       <span class="img">
+
+                    <if condition="$vo['color']">
+                        <i class="{$vo.color}" usename="CL" style="color:#BD6959"></i>
+                    <else />
+                        <i class="{$vo.option_key}" usename="CL" style="color:#BD6959"></i>
+                    </if>
+
+                        </span>
+                            <div class="list-info">
+                                <p>
+                                <!-- <if condition="$vo['type'] eq 2">
+                                         <span class="list-name block">{$vo.capital_name}  <font style="color: red;font-size: 12px;">new</font></span>
+
+                                        <elseif condition="$vo['type'] eq 3"/>
+                                         <span class="list-name block">{$vo.capital_name}  <font style="color: red;font-size: 12px;">hot</font></span>
+
+                                        <else />
+                                         <span class="list-name block">{$vo.capital_name}</span>
+                                    </if> -->
+                                <span class="list-name block">{$vo.capital_name}</span>
+                                  <if condition="$vo['flag'] eq 0">
+                                    <span class="list-img ">
+                                        <i class="right-icon">
+                                            <span class="icon-sun icon-star"></span>
+                                            <span class="icon-moon icon-star"></span>
+                                            <i class="list-txt">T+0</i>
+                                        </i>
+                                    </span>
+                                        <p>
+                                          <span class="gray mt02">{$vo.option_intro}</span>
+                                          <span class="gray list-time">已休市</span>
+                                        </p>
+                                <else />
+                                    <span class="list-img ">
+                                         <i class="right-icon">
+                                            <span class="text-range  red {$vo.capital_key}" data-key="{$vo.capital_key}">{$vo.Price}&nbsp;&nbsp;{$vo.DiffRate}%</span>
+                                         </i>
+                                    </span>
+                                       <p>
+                                              <span class="gray mt02">{$vo.option_intro}</span>
+                                              <span class="gray list-time">{:shijian($vo[id])}</span>
+                                        </p>
+                                </if>
+                                </p>
+                                <div class="right-arrow"></div>
+                            </div>
+                    </a>
+                </li>
+                </if>
+             </volist>
+
+               </ul>
+</foreach>
+
+            <div style="text-align: center;margin-top:.04rem;display:hidden;">
+                <p class="text-lesser" id="tele">客服电话：{:config('utel')}</p>
+                <p class="text-lesser">交易由香港交易所及纽约商品交易所及欧洲期货交易所实盘对接</p>
+                <p class="text-lesser1">合作伙伴: 平安保险|南华期货|芝加哥商品交易所|港交所</p>
+            </div>
+    </div>
+</section>
+
+
+    <div id="newMask">
+        <div class="Maskcon">
+            <div id="newNone"></div>
+            <h3></h3>
+            <p></p>
+            <a href="javascript:;">查看详情</a>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+
+
+<include file="Common:footer" />
+</div>
+<if condition="$info['content'] neq '' ">
+<div class="layer_notice" style="background: #5FB878;width: 100%; height: 100%;padding: 5px 10px;display: none;font-size: 0.16rem;color:#fff;">
+    {$info.content}
+</div>
+
+<script type="text/javascript">
+  layer.open({
+    time:10,
+    title:false,
+    content: $('.layer_notice').html(),
+    btn: '我知道了'
+  });
+</script>
+</if>
+</body>
+</html>
+
+<!--JS轮播-->
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".main_visual").hover(function(){
+            $("#btn_prev,#btn_next").fadeIn()
+        },function(){
+            $("#btn_prev,#btn_next").fadeOut()
+        });
+
+        $dragBln = false;
+
+        $(".main_image").touchSlider({
+            flexible : true,
+            speed : 200,
+            btn_prev : $("#btn_prev"),
+            btn_next : $("#btn_next"),
+            paging : $(".flicking_con a"),
+            counter : function (e){
+                $(".flicking_con a").removeClass("on").eq(e.current-1).addClass("on");
+            }
+        });
+
+        $(".main_image").bind("mousedown", function() {
+            $dragBln = false;
+        });
+
+        $(".main_image").bind("dragstart", function() {
+            $dragBln = true;
+        });
+
+        $(".main_image a").click(function(){
+            if($dragBln) {
+                return false;
+            }
+        });
+
+        timer = setInterval(function(){
+            $("#btn_next").click();
+        }, 5000);
+
+        $(".main_visual").hover(function(){
+            clearInterval(timer);
+        },function(){
+            timer = setInterval(function(){
+                $("#btn_next").click();
+            },5000);
+        });
+
+        $(".main_image").bind("touchstart",function(){
+            clearInterval(timer);
+        }).bind("touchend", function(){
+            timer = setInterval(function(){
+                $("#btn_next").click();
+            }, 5000);
+        });
+
+    });
+</script>
+<script type="text/javascript">
+var arr = [];
+$.each($('.capital_key'),function(){
+   var key = $(this).val();
+   arr.push(key);
+});
+var arrString = arr.join(',');
+ws = new WebSocket("ws://39.107.99.235:8889");
+ws.onopen = function() {
+    ws.send('tom');
+};
+ws.onmessage = function(e) {
+
+    var data = eval("("+e.data+")");
+    var type = data.type || '';
+    switch(type){
+        case 'init':
+            $.post('{:U("binding")}', {client_id: data.client_id,group:arrString}, function(data){}, 'json');
+            break;
+        // 当mvc框架调用GatewayClient发消息时直接alert出来
+        default :
+           // console.log(e.data);
+            var data     = JSON.parse(e.data);
+            var operator = data.DiffRate <=0 ? '' : '+';
+            var length   = $('#length'+data.capital_key+'').val();
+            data.Price   = data.Price.toFixed(length);
+
+            $('.'+data.capital_key+'').html(data.Price +'&nbsp;&nbsp;'+operator+data.DiffRate+'%');
+            if(data.DiffRate < 0) {
+                $('.'+data.capital_key+'').removeClass('red').addClass('green');
+            } else {
+                $('.'+data.capital_key+'').removeClass('green').addClass('red');
+            }
+    }
+};
+
+
+
+//推广赚钱
+$("#extension").click(function(){
+
+  var user_id = $("#user_id").val();
+    //询问框
+    layer.open({
+    content: '你确定要成为推广者吗'
+    ,btn: ['是的', '不要']
+    ,yes: function(index){
+      if(user_id == ''){
+        window.location="{:U('User/login')}";return false;
+      }
+
+        $.ajax({
+            url:"{:U('User/ExtensionIs')}",
+            dataType: 'json',
+            type: 'get',
+            success:function(data){
+
+                if(data.code == 1){
+
+                    window.location="{:U('User/extension')}";
+
+                } else{
+
+                    layer.open({
+                    content: '失败了，请稍候再试'
+                    ,skin: 'msg'
+                    ,time: 2
+                    });
+                }
+
+            }
+        });
+    }
+});
+});
+</script>

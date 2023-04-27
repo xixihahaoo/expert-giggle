@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html style="font-size: 100px;" lang="en"><head>
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>推广赚钱-{:config('s_domain_name')}{:config('webname')}</title>
+    <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/mine-merge.css">
+
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+
+    <script language="javascript" type="text/javascript" src="/Public/Home/js/jquery.qrcode.min.js"></script>
+
+</head>
+<body>
+<div class="doc page-main" id="doc">
+    <header class="page-header">
+        <div class="content">
+
+            <div class="left" style="margin-top: 0px;">
+
+            </div>
+
+            <h3>推广赚钱</h3>
+             <a href="{:U('User/index')}" class="back iconfont go-back icon-youjiantou"></a>
+            <a class="right" href="{:U('User/MyUser')}">我的用户</a>
+
+        </div>
+    </header>
+    <!-- 内容-->
+    <section class=" main-mine-spread mine-spread-home">
+        <div class="content tab-spread">
+            <article class="spread">
+                <div class="panel summary clearfix clear">
+                    <div class="ktyj">
+                        <div class="title text-lesser text-s14">可提佣金</div>
+                        <div class="main">
+                            <em class="text-s20"></em><span id="aa"><empty name="money">0<else />{$money}</empty>元</span>
+                            <input type="hidden" value="{$money}" id="ktjy">
+                        </div>
+                        <div class="ps">
+                            <a href="javascript:void(0)" class="button do-exchange" id="extract" data-money="0">提取</a>
+                        </div>
+                    </div>
+                    <div class="yjbl">
+                        <div class="yjblB">
+                            <div class="ps">
+                                <span>代理等级</span> <a class="iconfont" href="#1F" class="bottom">
+                          <!--       <img src="http://pro.jinguzhi.net/content/assets/imgs/what_03.png"> -->
+                                </a>
+                            </div>
+                            <div id="promoteLevel">普通</div>
+                        </div>
+                        <div class="yjblT">
+                            <div class="title text-lesser text-s14">
+                                <span>佣金比例</span> <a class="iconfont" href="#1F" >
+                                </a>
+                            </div>
+                            <div class="main text-s20" id="proportion">{:commission_rate('class_a')}% +{:commission_rate('class_b')}% </div>
+                        </div>
+
+                    </div>
+                    <div class="wdyh">
+                        <div class="wdyhT">
+                            <div class="title text-lesser text-s14">我的用户</div>
+                            <div class="main text-s20" id="wodeyonghu"><empty name="count">0<else />{$count}</empty></div>
+                        </div>
+                        <div class="wdyhB">
+                            <div class="ps text-lesser text-s16">交易用户</div>
+                            <div><em id="trader"><empty name="order_count">0<else />{$order_count}</empty></em></div>
+                        </div>
+
+                        <div class="wdyhB">
+                            <div class="ps text-lesser text-s16">未结算佣金</div>
+                            <div><em id="trader"><empty name="dataArr['WrongMoney']">0元<else />{$dataArr.WrongMoney}元</empty></em></div>
+                        </div>
+                        <div class="wdyhB">
+                            <div class="ps text-lesser text-s16">未结算订单</div>
+                            <div><em id="trader"><empty name="dataArr['WrongCount']">0个<else />{$dataArr.WrongCount}个</empty></em></div>
+                        </div>
+                    </div>
+
+                    <div class="wdyh">
+                        <div class="wdyhT">
+                            <div class="title text-lesser text-s14">已结算佣金:</div>
+                            <div class="main text-s20" id="wodeyonghu"><empty name="dataArr['RightMoney']">0元<else />{$dataArr.RightMoney}元</empty></div>
+                        </div>
+                        <div class="wdyhT">
+                            <div class="title text-lesser text-s14">已结算订单:</div>
+                            <div class="main text-s20" id="wodeyonghu"><empty name="dataArr['RightCount']">0个<else />{$dataArr.RightCount}个</empty></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel share">
+                    <div class="qrcode">
+                        <h3>截图二维码保存图片,发送给好友</h3>
+                        <div id="qrcode"></div>
+                        <div class="code" style="display: none;"></div>
+                    </div>
+                    <div class="title text-s16 http">
+                        分享您的专属链接:<span class="text-lesser"></span>
+                    </div>
+                    <div class="link text-s16" id="copy1">
+                        <input class="copy-target text-link" style="font-size:90%;width:3rem" readonly="readonly" value="{$code.url}" id="extensionLink">
+                        <span class="copy" disabled="disabled" id="c">长按链接</span>
+                    </div>
+
+                    <div class="porn">
+                        <div class="pornS">您的邀请码:</div>
+                        <div id="pornT">
+                            <input value="{$code.code}" id="yaoqing" readonly="readonly" type="text">
+                            <span class="copy" disabled="disabled" id="d">长按链接</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="how">
+                    <ul class="text-minor">
+                        <li>
+                            <span class="num"></span>
+                            <div class="howBg"></div>
+                            <p>发送推广链接给朋友</p>
+                        </li>
+                        <li>
+                            <span class="num"></span>
+                            <div class="howBg"></div>
+                            <p>点击链接注册成你用户</p>
+                        </li>
+                        <li>
+                            <span class="num"></span>
+                            <div class="howBg"></div>
+                            <p>你的用户开始交易</p>
+                        </li>
+                        <li>
+                            <span class="num"></span>
+                            <div class="howBg"></div>
+                            <p>开启赚钱模式</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="how1">
+                    <div class="how1Main">
+                        <p>朋友、朋友圈、微博、微信、QQ、博客、论坛或自己网站进行推广</p>
+                        <ul>
+                            <li class="clear">
+                                <div class="left"><span>1</span>个用户<span>1</span>天交易<span>10</span>次</div>
+                                <div class="right">你赚<span>120</span>元</div>
+                            </li>
+                            <li class="clear">
+                                <div class="left"><span>100</span>个用户</div>
+                                <div class="right">你赚<span>12000</span>元</div>
+                            </li>
+                            <li class="clear">
+                                <div class="left">交易<span>一个月</span></div>
+                                <div class="right">你赚<span>360000</span>元</div>
+                            </li>
+                            <li class="clear">
+                                <div class="left">交易<span>一年</span></div>
+                                <div class="right">你赚<span>4320000</span>元</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel level" >
+                    <table class="mod-table text-minor" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>一级用户<br>返佣比例
+                            </th>
+                             <th>二级用户<br>返佣比例
+                            </th>
+                            <th>下线<br>有效期
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>推广员</td>
+                            <td>{:commission_rate('class_a')}%</td>
+                           <td>{:commission_rate('class_b')}%</td>
+                            <td>一年</td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+
+$("#c").on('click',function(){
+        var e=document.getElementById("extensionLink");//对象是content
+        e.select(); //选择对象
+        document.execCommand("Copy"); //执行浏览器复制命令
+        //layer.msg('复制成功', {icon: 6});
+    });
+
+$("#d").on('click',function(){
+        var e=document.getElementById("yaoqing");//对象是content
+        e.select(); //选择对象
+        document.execCommand("Copy"); //执行浏览器复制命令
+        //layer.msg('复制成功', {icon: 6});
+    });
+
+$(".bottom").click(function(){
+
+          $('html,body').animate({scrollTop: $('.bottom').offset().top},1000);return false;
+
+});
+
+
+$("#extract").click(function(){
+
+  layer.open({
+    content: '您确定要提取所有佣金吗'
+    ,btn: ['确定', '不要']
+    ,yes: function(index){
+
+            // var index = layer.load(0, {
+            //     shade: [0.1,'#fff'] //0.1透明度的白色背景
+            // });
+           var money = $("#ktjy").val();
+           $.ajax({
+           	   url:"{:U('User/Commission')}",
+           	   type:"post",
+           	   dataType:"json",
+           	   data:"money="+money+"",
+           	   success:function(data){
+
+                    if(data.status === 0){
+                        
+                          layer.close(index);
+                          layer.open({
+                                content: data.msg
+                                ,skin: 'msg'
+                                ,time: 2 //2秒后自动关闭
+                              });
+                        return false;
+                    } else {
+
+                        layer.close(index);                     
+                        layer.open({
+                                content: data.msg
+                                ,skin: 'msg'
+                                ,time: 2 //2秒后自动关闭
+                        });
+                       window.setTimeout("window.location='{:U('User/index')}'",2000);
+                    }
+
+           	   }
+             })
+      }
+  });
+});
+
+
+$('.code').qrcode($(".text-link").val());
+
+
+function convertCanvasToImage(canvas) {
+    //新Image对象，可以理解为DOM
+    var image = new Image();
+    // canvas.toDataURL 返回的是一串Base64编码的URL
+    // 指定格式 PNG
+    image.src = canvas.toDataURL("image/png");
+    return image;
+}
+
+var mycanvas1=document.getElementsByTagName('canvas')[0];
+
+var img=convertCanvasToImage(mycanvas1);
+
+$('#qrcode').append(img);
+
+</script>

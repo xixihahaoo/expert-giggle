@@ -1,0 +1,233 @@
+<extend name="Base/common"/>
+<block name="content">
+<!-- this page specific styles -->
+<link rel="stylesheet" href="__CSS__/compiled/user-list.css" type="text/css" media="screen">
+<link rel="stylesheet" type="text/css" href="__CSS__/layerui/css/layui.css">   
+<script src="__JS__/theme.js"></script>
+<script type="text/javascript" src="__PUBJS__/layer/layer.js"></script>
+
+<div class="container-fluid">
+            <div id="pad-wrapper" class="users-list">
+                <div class="row-fluid header" style="margin-bottom: 10px">
+                    <form id="form1" action="__URL__/agent" method="get">
+                    <input type="hidden" name="uid" value="{$uid}">
+                     <h3 style="height: 40px; width: 100%;font-size: 24px;">{$info.username}</h3>
+                    <div class="span10 pull-left">
+                        <div class="tpsearch" style="width: 20%">
+                        手机号：<input type="text" class="span6 search" value="{$phone}" placeholder="请输入手机号" name="phone" id="phone"/>
+                        </div>
+                        <div class="tpsearch"  style="width: 20%">
+                            用户名称：<input type="text" value="{$username}" class="span6 search" placeholder="请输入用户名称查找..." name="username" id="username"/>
+                        </div>
+                     
+                    </div>
+                    <div class="tpsearch" style="width:12%;float:right">
+                        <a href="javascript:void(0)" class="btn-flat info" onclick="javascript:$('#form1').submit();">开始查找</a>
+                        <a href="javascript:void(0)" class="btn-flat info" onclick="sub()">查找导出</a>
+                    </div>
+                    </form>
+                </div>
+                <!-- Users table -->
+                <div class="row-fluid table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th class="span1 sortable">
+                                    编号
+                                </th>
+                                <th class="span2 sortable">
+                                    <span class="line"></span>用户名
+                                </th>
+                                <th class="span2 sortable">
+                                    <span class="line"></span>域名
+                                </th>
+                                <th class="span2 sortable">
+                                    <span class="line"></span>手机号
+                                </th>
+                                <th class="span2 sortable">
+                                    <span class="line"></span>注册时间
+                                </th>
+
+<!--                                 <th class="span2 sortable">
+                                    <span class="line"></span>余额
+                                </th> -->
+                                <th class="span2 sortable">
+                                    <span class="line"></span>操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="ajaxback">
+                        <volist name="user" id="ult">
+                        <!-- row -->
+                        <tr class="first">
+                            <td>
+                                {$ult['uid']}
+                            </td>
+                            <td>
+                                    <a href="{:U('Menber/mupdate',array('uid'=>$ult['uid']))}">{$ult['username']}</a>
+                            </td>
+                            <td>
+                                {$ult['s_domain']}
+                            </td>
+                            <td>
+                                {$ult['utel']}
+                            </td>
+                            <td>
+                               {$ult.utime|date='Y-m-d H:i:s',###}
+                            </td>
+
+<!--                             <td>
+                           <if condition="$ult['balance'] neq ''">
+                               
+                               <a class="layui-btn layui-btn-danger layui-btn-radius profit" data_id="{$ult.uid}">{$ult.balance}￥</a>
+                            
+                            <else />
+                               <a class="layui-btn layui-btn-danger layui-btn-radius profit" data_id="{$ult.uid}">0￥</a>
+                            </if>
+                            </td> -->
+
+                            <td>
+                                <a  class="del"  data-id="{$ult['uid']}">删除</a>
+                            </td>
+
+                        </tr>
+                        </volist>  
+                        </tbody>
+                    </table>
+                <div class="qjcz">
+                    <span style="margin-right:30px;float:right">总经纪人：<i style="color:red">{$count}个</i><br></span>
+                </div>
+                </div>
+                <div class="pagination pull-right">
+                    <ul>
+                        {$page}
+                    </ul>
+                </div>
+                <!-- end users table -->
+            </div>
+        </div>
+<!-- scripts -->
+<script src="__JS__/jquery-latest.js"></script>
+<script src="__JS__/bootstrap.min.js"></script>
+<script src="__JS__/bootstrap.datepicker.js"></script>
+<script src="__JS__/theme.js"></script>
+<script type="text/javascript" src="__PUBJS__/layer/layer.js"></script>
+<script type="text/javascript">
+    
+    $(".del").click(function(){
+ 
+        var uid = $(this).attr('data-id');
+
+          //询问框
+          layer.open({
+            content: '您确定要删除吗？'
+            ,btn: ['确定', '不要']
+            ,yes: function(index){
+           
+                 $.ajax({
+                           url:"{:U('agent_del')}",
+                           type:"post",
+                           dataType:"json",
+                           data:"uid="+uid+"",
+                           success:function(data){
+                                if(data.status == 0){
+                                    layer.open({
+                                        content: data.msg,
+                                        btn: '确定',
+                                        yes: function(index, layero){
+                                            layer.close(index);
+                                            top.location.reload();
+                                        }
+                                    });
+                                } else {
+
+                                    layer.open({
+                                        content: data.msg,
+                                        btn: '确定',
+                                        yes: function(index, layero){
+                                            layer.close(index);
+                                            top.location.reload();
+                                        }
+                                    });
+                                }
+
+                           }
+                       });
+              layer.close(index);
+            }
+          });
+
+  });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var eqli = $("#dashboard-menu").children().eq(8);
+        eqli.attr('class','active');
+        $("#dashboard-menu .active .submenu").css("display","block");
+        
+    function sub()
+    {
+        $('#form1').attr("action","__URL__/daochu");
+        $('#form1').submit();
+    }
+}
+
+   
+</script>
+
+<script type="text/javascript">
+  
+$(".profit").click(function(){
+
+var  uid = $(this).attr('data_id');
+
+ layer.prompt({title: '请输入要修改的金额', formType: 0}, function(pass, index){
+    layer.close(index);
+
+           $.ajax({
+                type: "post",
+                url: "{:U('balance')}",
+                data:{'uid' : uid,'balance': pass},
+                success: function(data) {
+                    console.log(data.status);
+                    if(data.status == 1)
+                    {
+                        layer.open({
+                            content: data.msg,
+                            btn: '确定',
+                            yes: function(index, layero){
+                                layer.close(index);
+                                top.location.reload();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: data.msg,
+                            btn: '确定',
+                            yes: function(index, layero){
+                                layer.close(index);
+                                top.location.reload();
+                            }
+                        });
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+
+   });
+
+});
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var eqli = $("#dashboard-menu").children().eq(8);
+        eqli.attr('class','active');
+        $("#dashboard-menu .active .submenu").css("display","block");
+    });
+</script>
+</block>

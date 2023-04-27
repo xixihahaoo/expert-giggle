@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html><head>
+    <title>{:config('s_domain_name')}{:config('webname')}</title>
+     <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/merge_product.css">
+    <link rel="stylesheet" href="__CSS__/index_merge.css">
+    <link rel="stylesheet" href="__CSS__/merge.css">
+    <link rel="stylesheet" href="__CSS__/wxcommon.css">
+    <link rel="stylesheet" href="__CSS__/index.css">
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/layerui/css/layui.css">
+    <script type="text/javascript" src="__CSS__/layerui/layui.js"></script>
+
+
+    <style type="text/css">
+        ul.alist{padding: 15px;margin-top: 48px;}
+        ul.alist li{border: 1px solid #ededed;padding: 10px;margin-bottom: 15px;}
+        ul.alist li>h3{font-size: 20px;font-weight: bold;color: #333;line-height: 30px;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;}
+        ul.alist li h3 img{width: 100%;display: block;margin-bottom: 10px;}
+        ul.alist li .content{max-height: 72px;overflow: hidden;text-overflow: ellipsis;}
+        ul.alist li .bottom{width: 100%;margin-top: 10px;}
+        ul.alist li .bottom span{color: #9a9797;}
+        .nomsg{text-align: center;}
+        .more {
+            color: #888;
+            border:1px solid #ddd;
+            display: block;
+            width: 80%;
+            height: 38px;
+            line-height: 36px;
+            padding: 0 10px;
+            text-align: center;
+            margin: 0 auto;
+        }
+        #listContent li .bottom span{
+            font-size: 0.1rem;
+        }
+        .news-nav i {font-size:15px;}
+        .page-footer .content .icon-zx {
+            color: #DA3333;
+        }
+
+        .page-footer .content .icon-home {
+            color: #B5B5B5;
+        }
+    </style>
+</head>
+<body class="page-news">
+<div class="hbar">
+    <div class="content">
+        <h3>行业资讯</h3>
+        <div class="arrow">
+            <a href="{:U('Index/index')}" class="iconfont go-back icon-xiangzuojiantou"></a>
+        </div>
+    </div>
+</div>
+
+<div class="body">
+    <include file="Common:1" />
+    <div>
+        <ul class="alist" id="listContent">
+            <volist name="newslist" id="vo">
+             <input type="hidden" value="{$i}" id="number">
+            <li>
+                  <a href="{:U('news/ndetail',array(tid=>$vo['tid']))}">
+                  <h3>{$vo.post_title}</h3>
+                  <div class="cont">　　{$vo['post_excerpt']}</div>
+                  <div class="bottom clearfix">
+                      <div class="left">
+                          <span class="time">{$vo.post_date}</span>
+                      </div>
+                      <div class="right">
+                          <span>&nbsp;{$vo.user_nicename}</span>
+                      </div>
+                  </div>
+                  </a>
+              </li>
+                </volist>
+        </ul>
+        <p class='nomsg' style="display: none;padding-bottom: 15px;">暂无资讯</p>
+        <a href="javascript:void(0)" class="more" id="demo">查看更多</a></div>
+
+</div>
+<!-- 底部 -->
+
+<input type="text" value="{$maxId}" id="maxId">
+
+
+
+<include file="Common:footer" />
+<script type="text/javascript">
+
+var maxId = 0;
+$(".more").click(function(){
+    maxId = $('#maxId').val();
+    console.log(maxId);
+    cc(maxId);
+});
+
+  function cc(maxId){
+
+
+            $.ajax({
+                url: "{:U('News/new_news')}",
+                dataType: 'json',
+                type: 'get',
+                data: {maxId:maxId},
+                success: function (data) {
+
+                    $('#maxId').val(data.maxId);
+                    
+                    console.log(data);
+                    
+                    var html  = '';
+                    var error = '';
+                    if(data){
+
+                        $.each(data.list,function(key,val){
+
+                        html += '<li>';
+                        html += '<a href="/Home/News/ndetail/tid='+val.tid+'">';
+                        html += ' <h3>'+val.post_title+'</h3>';
+                        html += '<div class="cont">'+val.post_excerpt+'</div>';
+                        html += '<div class="bottom clearfix">';
+                        html += '<div class="left">';
+                        html += '<span class="time">'+val.post_date+'</span>';
+                        html += '</div>';
+                        html += '<div class="right">';
+                        html += '<span>&nbsp;'+val.user_nicename+'</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</a>';
+                        html += '</li>';
+                    });
+                         $(".alist").append(html);
+
+                    } else{
+                        error += '<p class="nomsg">暂无资讯</p>';
+                        $(".nomsg").css('display','block');
+                        $(".nomsg").html(error);
+                    }
+
+
+                }
+            });
+  };
+
+if($(".zhibo a i").html() == $(".zhibo a i").html()){
+
+    $(".zhibo:last").addClass('on');
+}
+  
+</script>
+</body>
+</html>

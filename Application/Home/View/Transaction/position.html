@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://pro.jinguzhi.net/guoji/index.html?commodity=CL&tradeType=2 -->
+<html style="display: block;"><head>
+    <title>{:config('s_domain_name')}{:config('webname')}</title>
+     <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/merge_product.css">
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <script type="text/javascript" src="__CSS__/layer/layer.js"></script>
+</head>
+<body>
+    
+<div id="doc" class="doc">
+
+     <!-- panel: 持仓 -->
+     <div class="page page-open-interest" style="display: block;">
+        <!-- 头部 -->
+        <header class="page-header page-header-score" style="background: #941E22">
+            <div class="content">
+                <h3>持仓</h3>
+                <div class="left">
+                <eq name="type" value="1">
+                        <a href="{:U('Index/product',array('id' => $option[id]))}" class="iconfont go-back icon-xiangzuojiantou"></a>
+                 <else />
+                        <a href="{:U('Simulation/product',array('id' => $option[id]))}" class="iconfont go-back icon-xiangzuojiantou"></a>
+                </eq>
+                   
+                </div>
+                <div class="right"><a href="{:U('Transaction/settlement',array('pid' => $option[id], 'type' => $type))}" class="go-settle">结算</a></div>
+            </div>
+        </header>
+       
+    <if condition="$order neq '' ">
+
+        <input type="hidden" value="{$type}" id="type">    <!-- 1实盘交易 2虚拟交易 -->
+        <input type="hidden" value="{$user_id}" id="users">
+        
+        <article class="open-interest">
+             <div class="summary sumIncome clearfix" style="">
+                <div class="left">
+                    <div class="text-minor">持仓总收益(<span class="currency">{$sum.type}</span>)</div>
+                    <em class="text-lows text-l">{$sum.sum}</em>
+                    <span class="text-minor" id="sub_rmb">({$sum.sum_rmb}元)</span>
+                </div>
+                <div class="right">
+                    <a href="javascript:;" class="text-link fast-sold-all lim" id="all">一键平仓</a>
+                </div>
+            </div>
+                   <input type="hidden" value="{$option.id}">
+            <div class="lists">
+             <volist name="order" id="vo">
+             <div class="clear" id="oid{$vo.oid}" oid="{$vo.oid}">
+                    <input type="hidden" value="{$vo.pid}" id="pid">
+                    <input type="hidden" value="{$vo.oid}" class="id">
+
+                    <ul class="mod-list mod-list-std" data-index="0">
+                        <li class="clearfix">
+                            <div class="title">
+                             <if condition="$vo['ostyle'] eq 0">
+                                <h3 class="text-highs  color1{$i}">买涨{$vo.onumber}手<span> ({$option.capital_name})</span></h3>
+                             <else />
+                                <h3 class="text-lows color2{$i}">买跌{$vo.onumber}手<span> ({$option.capital_name})</span></h3>
+                             </if>
+                                <h3 class="income{$i} text-lows text-right" style="margin-left: 0.8rem ">{$vo.ploss}</h3>
+                                <span id="rmb{$i}" style="color: green">({$vo.RMB}元)</span>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="left">
+                                <p class="text-lesser">
+                                    <span>止盈 {$vo.endprofit}</span>
+                                    <span>买入 {$vo.buyprice}</span>
+                                </p>
+                                <p class="text-lesser">
+                                    <span>止损 {$vo.endloss}</span>
+                                    <if condition="$vo['ostyle'] eq 0">
+                                       <span>现价 <em class="lastPricetop">{$option.new_pricetop}</em></span>
+                                    <else />
+                                       <span>现价 <em class="lastPriceup">{$option.new_priceup}</em></span>
+                                    </if>
+                                </p>
+                                <p class="text-lesser">
+                                    <span style="width:1.7rem">买入时间 {:date('Y-m-d H:i:s',$vo['buytime'])}</span>
+                                </p>
+                            </div>
+                            <div class="right">
+                                <div class="status sold">
+                                     <span class="Manual" data="{$vo.oid}" ostyle="{$vo.ostyle}">平仓</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="action hide">
+                            <span class="text-lesser">${tradeMsg}</span>
+                        </li>
+                    </ul>
+                </div>
+                </volist>
+            </div>
+        </article>
+<else />
+
+   <div class="lists" id="stop">
+          <div class="" style="margin-top: 0.8rem;text-align: center;">暂无交易</div>
+   </div>
+</if>
+
+    </div>
+
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+    
+        var pid    = $("#pid").val(); 
+        var type   = $("#type").val();  //1实盘 2虚拟
+        if(pid){
+            setInterval(function(){
+
+                var arr = [];
+                $.each($('.id'),function(){
+                    var key = $(this).val();
+                    arr.push(key);
+                });
+                var arrString = arr.join(',');
+                
+                console.log(arrString);
+            
+            
+            $.ajax({
+                url: "{:U('PositionData')}",
+                dataType: 'json',
+                type: 'get',
+                data: {'pid':pid,'type':type,id:arrString},
+                success: function (data,status) {                       
+                   
+                if( status == 'success') {
+                    if(data.status == 0){
+                        $(".open-interest").remove();
+                        return false;
+                    } 
+                    var arr = [];
+                    $.each($(".clear"),function(){
+                       var oid = $(this).attr('oid');
+                        arr.push(oid);
+                      });
+
+                    var arr1 = [];
+                    for(var i=0;i<data.length;i++){
+                      arr1.push(data[i].oid);
+                    
+                    if(data[i].ploss >= 0){
+                         
+                         var operators = "+";
+                         $(".income"+[i+1]+"").removeClass('text-lows');
+                         $(".income"+[i+1]+"").css('color','#DA2F34');
+                         $("#rmb"+[i+1]+"").css('color','#DA2F34');
+                         $(".color1"+[i+1]+"").css('color','#DA2F34');
+                         $(".color2"+[i+1]+"").css('color','#DA2F34');
+                    } else {
+                         var operators = "";
+                          $(".income"+[i+1]+"").css('color','#539B53');
+                          $("#rmb"+[i+1]+"").css('color','#539B53');
+                          $(".color1"+[i+1]+"").css('color','#539B53');
+                          $(".color2"+[i+1]+"").css('color','#539B53');
+                    }
+
+                    $(".income"+[i+1]+"").html(operators+data[i].ploss);    //单个金额
+
+                    $("#rmb"+[i+1]+"").html("("+operators+data[i].RMB+"元)");
+                    $(".lastPricetop").html(data[i].new_pricetop);    //最新价格
+                    $(".lastPriceup").html(data[i].new_priceup);      //最新价格
+                     
+                    if(data[i].sum >= 0){
+                       
+                       var fu = '+';
+                       $(".text-l").removeClass('text-lows');
+                       $(".text-l").css('color','#DA2F34');
+                       $("#sub_rmb").css('color','#DA2F34');
+                    } else {
+                        var fu = '';
+                        $(".text-l").removeClass('text-lows');
+                        $(".text-l").css('color','#539B53');
+                        $("#sub_rmb").css('color','#539B53');
+                    }
+                    $(".text-l").html(fu+data[i].sum);  //统计金额
+                    $("#sub_rmb").html('('+fu+data[i].sum_rmb+'元)');
+
+                        if(pid == '') {
+                            $(".page").css('display','none');
+                            $(".open-interest").css('display','none');
+                            $("#stop").css('display','block');
+                         } else {
+
+                            $(".page").css('display','block');
+                            $(".open-interest").css('display','block');
+                            $("#stop").css('display','none');
+                         }
+                  }
+                    //删除指定元素
+                     var arr2 = [];
+                     for(key in arr) {
+                        var stra = arr[key];  
+                        var count = 0;
+                        for(var j= 0; j < arr1.length; j++) {
+                          var strb = arr1[j];  
+                          if(stra == strb) {
+                              count++;
+                          }  
+                      }    
+                      if(count === 0) {
+                            arr2.push(stra);  
+                        }  
+                     }
+                     if(arr2 != '') {
+                        for (k in arr2) {
+                          $("#oid"+arr2[k]+"").remove();
+                       }
+                     }
+
+                } else {
+                    var index = layer.load(1, {
+                          shade: [0.1,'#fff'] //0.1透明度的白色背景
+                      });
+                   }
+                }
+            });
+
+       },"{$ajax}");
+
+//5分钟后刷新页面
+window.setTimeout("location.reload()",120000);
+}
+// var pid   = $("#pid").val(); 
+// var type  = $("#type").val();  //1实盘 2虚拟
+// var users = $('#users').val();
+
+// if (pid) {
+//     ws = new WebSocket("ws://hjb.hjb58.com:3308");
+//     ws.onopen = function() {
+//         data = {'event':'position','pid':pid,'type':type,'users':users};
+//         ws.send(JSON.stringify(data));
+//     };
+
+//     ws.onmessage = function(e) {
+//        data = JSON.parse(e.data);
+//                     if(data.status == 0){
+//                         $(".open-interest").remove();
+//                         return false;
+//                     } 
+//                     var arr = [];
+//                     $.each($(".clear"),function(){
+//                        var oid = $(this).attr('oid');
+//                         arr.push(oid);
+//                       });
+
+//                     var arr1 = [];
+//                     for(var i=0;i<data.length;i++){
+//                       arr1.push(data[i].oid);
+                    
+//                     if(data[i].ploss >= 0){
+                         
+//                          var operators = "+";
+//                          $(".income"+[i+1]+"").removeClass('text-lows');
+//                          $(".income"+[i+1]+"").css('color','#DA2F34');
+//                          $("#rmb"+[i+1]+"").css('color','#DA2F34');
+//                          $(".color1"+[i+1]+"").css('color','#DA2F34');
+//                          $(".color2"+[i+1]+"").css('color','#DA2F34');
+//                     } else {
+//                          var operators = "";
+//                           $(".income"+[i+1]+"").css('color','#539B53');
+//                           $("#rmb"+[i+1]+"").css('color','#539B53');
+//                           $(".color1"+[i+1]+"").css('color','#539B53');
+//                           $(".color2"+[i+1]+"").css('color','#539B53');
+//                     }
+
+//                     $(".income"+[i+1]+"").html(operators+data[i].ploss);    //单个金额
+
+//                     $("#rmb"+[i+1]+"").html("("+operators+data[i].RMB+"元)");
+//                     $(".lastPricetop").html(data[i].new_pricetop);    //最新价格
+//                     $(".lastPriceup").html(data[i].new_priceup);      //最新价格
+                     
+//                     if(data[i].sum >= 0){
+                       
+//                        var fu = '+';
+//                        $(".text-l").removeClass('text-lows');
+//                        $(".text-l").css('color','#DA2F34');
+//                        $("#sub_rmb").css('color','#DA2F34');
+//                     } else {
+//                         var fu = '';
+//                         $(".text-l").removeClass('text-lows');
+//                         $(".text-l").css('color','#539B53');
+//                         $("#sub_rmb").css('color','#539B53');
+//                     }
+//                     $(".text-l").html(fu+data[i].sum);  //统计金额
+//                     $("#sub_rmb").html('('+fu+data[i].sum_rmb+'元)');
+
+//                         if(pid == '') {
+//                             $(".page").css('display','none');
+//                             $(".open-interest").css('display','none');
+//                             $("#stop").css('display','block');
+//                          } else {
+
+//                             $(".page").css('display','block');
+//                             $(".open-interest").css('display','block');
+//                             $("#stop").css('display','none');
+//                          }
+//                   }
+//                     //删除指定元素
+//                      var arr2 = [];
+//                      for(key in arr) {
+//                         var stra = arr[key];
+//                         var count = 0;
+//                         for(var j= 0; j < arr1.length; j++) {
+//                           var strb = arr1[j];  
+//                           if(stra == strb) {
+//                               count++;
+//                           }
+//                       }
+//                       if(count === 0) {
+//                             arr2.push(stra);
+//                         }  
+//                      }
+//                      if(arr2 != '') {
+//                         for (k in arr2) {
+//                           $("#oid"+arr2[k]+"").remove();
+//                        }
+//                      }
+//     }
+// }
+</script>
+
+<script type="text/javascript" src="__CSS__/layer/mobile/layer.js"></script>
+<script type="text/javascript">
+
+//单个平仓
+$(".Manual").click(function(){
+
+    
+    var oid     = $(this).attr('data');
+    var ostyle  = $(this).attr('ostyle');
+    
+    layer.open({
+        content: '您确定要卖出？'
+        ,btn: ['确定', '不要']
+        ,yes: function(index){
+            positionManual(oid,ostyle);
+        }
+    });
+});
+
+//单个产品平仓
+function positionManual(oid,ostyle) {
+    // var index = layer.load(0, {
+    //     shade: [0.1,'#fff'] //0.1透明度的白色背景
+    // });
+
+    var index        = layer.open({type: 2});
+    
+    var oid          = oid;
+    var sellpricetop = $(".lastPricetop").html(); //最新买张价格
+    var lastPriceup  = $(".lastPriceup").html();  //最新买跌价格
+    var type         = $("#type").val();         //1实盘 2虚拟
+    var ostyle       = ostyle;                   //判断买涨买跌类型
+    if(ostyle == 0){
+        var sellprice = sellpricetop;
+    } else {
+        var sellprice = lastPriceup;
+    }
+    $.ajax({
+
+        url:"{:U('Manual')}",
+        dataType: 'json',
+        type: 'post',
+        data: "oid="+oid+"&sellprice="+sellprice+"&type="+type+" ",
+        success:function(data){
+
+            if(data.status === 1){
+                // layer.close(index);
+                // layer.msg(data.msg, {icon: 6});
+                layer.open({
+                    content: data.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                window.location='{:U('Transaction/settlement',array('pid' => $option[id], 'type' => $type))}';
+                return false;
+            }
+
+            if(data.status === 0){
+                layer.close(index);
+                // layer.msg(data.msg, {icon: 7});
+                layer.open({
+                    content: data.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                return false;
+            }
+        }
+    });
+}
+
+
+//一键平仓
+$("#all").click(function(){
+
+    layer.open({
+        content: '您确定要卖出所有产品？'
+        ,btn: ['确定', '不要']
+        ,yes: function(index){
+            positionAll();
+        }
+    });
+    
+
+});
+
+function positionAll() {
+    // var index = layer.load(0, {
+    //     shade: [0.1,'#fff'] //0.1透明度的白色背景
+    // });
+
+    var index        = layer.open({type: 2});
+    
+    var oid = '';
+    $.each($(".id"),function(){
+        oid += $(this).val()+',';
+    });
+
+    var pid          = $("#pid").val();
+    var sellpricetop = $(".lastPricetop").html(); //最新买涨价格
+    var sellpriceup  = $(".lastPriceup").html(); //最新买跌价格
+    var type         = $("#type").val();       //1实盘 2虚拟
+
+    $.ajax({
+
+        url:"{:U('All')}",
+        dataType: 'json',
+        type: 'post',
+        data: {'pid':pid,'sellpricetop':sellpricetop,'sellpriceup':sellpriceup,'type':type,'oid':oid},
+        success:function(data){
+
+            if(data.status === 1){
+                //layer.close(index);
+                // layer.msg(data.msg, {icon: 6});
+                layer.open({
+                    content: data.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                window.setTimeout("window.location='{:U('Transaction/settlement',array('pid' => $option[id], 'type' => $type))}'",1000);
+                return false;
+            }
+
+            if(data.status === 0){
+                layer.close(index);
+                // layer.msg(data.msg, {icon: 7});
+                layer.open({
+                    content: data.msg
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+                return false;
+            }
+        }
+    });
+}
+</script>

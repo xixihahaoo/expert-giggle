@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://zhongying.gwecaopan.com/mine/users.html -->
+<html class="hairline" style="font-size: 100px;"><head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>我的用户 - {:config('s_domain_name')}{:config('webname')}</title>
+    <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/mine-merge1.css">
+    <link rel="stylesheet" href="__CSS__/merge_product.css">
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" href="__CSS__/layerui/css/layui.css"  media="all">
+    <script type="text/javascript">
+        var __baseDir = 'http://'+window.location.host+'/content/';
+    </script>
+    <script>
+        document.getElementsByTagName('html')[0].style.fontSize = '100px'; 
+    </script>
+</head>
+<body>
+<script>
+    (function () {
+        var el = document.createElement('div');
+        el.style.border = '.5px solid transparent';
+        document.body.appendChild(el);
+        if (el.offsetHeight >= 1) {
+            document.documentElement.classList.add('hairline');
+        }
+        document.body.removeChild(el);
+    })();
+</script>
+<div id="doc" class="doc page-mine">
+    <!-- 头部 -->
+    <header class="page-header" id="head">
+        <div class="content">
+            <h3>推广赚钱</h3>
+            <div class="left">
+                <a href="{:U('User/extension')}"  class="iconfont go-back icon-xiangzuojiantou"></a>
+            </div>
+            <!-- <a class="right" style="font-size:.16rem" href="http://zhongying.gwecaopan.com/promote/users.html">推广详情</a> -->
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-mine-spread mine-spread-user">
+        <div class="content tab-users">
+            
+            <article class="users text-minor">
+                <div class="th clearfix">
+                    <span class="right">用户</span>
+                   <span class="right">产品</span>
+                     <span class="right">赚取佣金</span> 
+                     <span class="right">级别</span> 
+                     <span class="right">状态</span>
+                     <span class="right">购买时间</span> 
+                </div>
+
+                <ul class="mod-list">
+                         <volist name="user" id="vo">
+                            <li style="line-height: .4rem;">
+                               <span>{$vo.username}</span>
+                               <span>{$vo.capital_name}</span>
+                                <span><font style="color: red;">￥</font>{$vo.profit}</span>
+                                <span>{$vo.lavel}</span>
+                                <if condition="$vo['status'] eq 2">
+                                <span style="color: red;">未结算</span>
+                                <else />
+                                <span style="color: green;">已结算</span>
+                                </if>
+                                <span>{$vo.create_time|date='y-m-d',###}</span>
+                            </li>
+                         </volist>
+                </ul>
+                <div id="LAY_demo1"></div>
+            </article>
+        </div>
+    </section>
+  </div>
+</body>
+</html>
+
+<script src="__CSS__/layerui/layui.js" charset="utf-8"></script>
+<script>
+layui.use('flow', function(){
+  var flow = layui.flow;
+ 
+  flow.load({
+    elem: '#LAY_demo1' //流加载容器
+    ,scrollElem: '' //滚动条所在元素，一般不用填，此处只是演示需要。
+    ,done: function(page, next){ //执行下一页的回调
+
+      //模拟数据插入
+      setTimeout(function(){
+        var lis = [];
+        
+          $.ajax({
+                url: "{:U('MyUser')}",
+                dataType: 'json',
+                type: 'get',
+                data:"page="+((page-1)*10)+"",
+                success: function (data) {       
+                        var html = '';
+                        $.each(data,function(key,val){
+                          
+                            html += '<li style="line-height: .4rem;">';
+                            html += '<span>'+val.username+'</span>';
+                            html += '<span>'+val.capital_name+'</span>';
+                            html += '<span><font style="color: red;">￥</font>'+val.profit+'</span>';
+                            html += '<span>'+val.lavel+'</span>';
+                            if(val.status == 2)
+                            {
+                                html += '<span style="color: red;">未结算</span>';
+                            } else {
+                                html += '<span style="color: green;">已结算</span>';
+                            }
+                            html += '<span>'+val.create_time+'</span>';
+                            html += '</li>';
+                    });
+                    $(".mod-list").append(html);
+                }
+            });
+        next(lis.join(''), page < "{$count}");
+      }, 1000);
+    }
+  });
+});
+</script>
+

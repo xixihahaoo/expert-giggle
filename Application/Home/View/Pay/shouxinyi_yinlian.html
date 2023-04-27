@@ -1,0 +1,26 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+    <title>send</title>
+
+</head>
+<body>
+<form action="https://pay.yizhifubj.com/customer/gb/pay_bank.jsp" method="post" name="payease_form" target="_parent">
+    <input type="hidden"  name="v_mid"        value="{$payrs['v_mid']}">
+    <input type="hidden"  name="v_oid"      value="{$payrs['v_oid']}">
+    <input type="hidden"  name="v_rcvname"  value="{$payrs['v_rcvname']}">
+    <input type="hidden"  name="v_rcvaddr"  value="{$payrs['v_rcvaddr']}">
+    <input type="hidden"  name="v_rcvtel"   value="{$payrs['v_rcvtel']}">
+    <input type="hidden"  name="v_rcvpost"  value="{$payrs['v_rcvpost']}">
+    <input type="hidden"  name="v_amount"   value="{$payrs['v_amount']}">
+    <input type="hidden"  name="v_ymd"      value="{$payrs['v_ymd']}">
+    <input type="hidden"  name="v_orderstatus" value="{$payrs['v_orderstatus']}">
+    <input type="hidden"  name="v_ordername" value="{$payrs['v_ordername']}">
+    <input type="hidden"  name="v_moneytype" value="{$payrs['v_moneytype']}">
+    <input type="hidden"  name="v_url" value="{$payrs['v_url']}">
+    <input type="hidden"  name="v_pmode" value="126">
+    <input type="hidden"  name="v_md5info" value="{$payrs['v_md5info']}">
+</form>
+<script language="javascript">payease_form.submit();</script>
+</body>
+</html>

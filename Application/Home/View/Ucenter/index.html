@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html style="font-size: 100px;"><head>
+    <title>我的账户</title>
+    <include file="Common:header" />
+
+    <link rel="stylesheet" href="__CSS__/merge_user.css">
+
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/layer_mobile/layer.css">
+    <script type="text/javascript" src="__CSS__/layer_mobile/layer.js"></script>
+
+ <style type="text/css">
+        
+#accounts .user .img{
+             width: 0.77rem;
+            height: 0.77rem;
+/*            <if condition="$face[open_face]">*/
+            background: url('{$face.open_face}')no-repeat;
+/*            <else />
+            background: url('http://zhongying.gwecaopan.com/content/assets/imgs/head_visitor.png')no-repeat;
+            </if>*/
+            background-size: cover;
+            display: block;
+            margin: 0.1rem auto;
+            border-radius: 50%;
+       }
+ </style>
+
+</head>
+<body>
+
+<div id="doc" class="doc page-mine" data-details="" data-financy="">
+    <!-- 头部 -->
+    <header class="page-header">
+        <div class="content">
+            <h3>我的</h3>
+            <div class="right">
+               <!--  <a href="{:U('Register/logout')}" style="display: block;">退出</a> -->
+            </div>
+        </div>
+    </header>
+
+    <!-- 内容 -->
+    <section class="page-main main-mine">
+        <div class="content">
+            <!-- 账户内容 -->
+            <article class="accounts" id="accounts">
+                <div class="user">
+                    <a class="goDetail" href="{:U('User/personal')}" data-href="">
+                        <span class="img"></span>
+                         <if condition="$userinfo[nickname]">
+                         <span class="name">您好，{$userinfo.nickname}</span>
+                        <else />
+                         <span class="name">您好，{$userinfo.username}</span>
+                        </if>
+                    </a>
+                </div>
+                <div class="detail">
+                    <div class="summary clearfix">
+                        <ul>
+                            <li class="text-lesser"><span class="text-stress"><em class="text-l">
+                            <empty name="userinfo[balance]">
+                             0
+                             <else />
+                            {$userinfo.balance}
+                            </empty>
+                            </em></span></li>
+                            <li class="text-lesser">账户余额(元)</li>
+                        </ul>
+                        <if condition="$trade eq 1">
+                        <ul>
+                            <li class="text-lesser"><em class="text-minor text-m">
+                             <empty name="userinfo[gold]">
+                             0
+                             <else />
+                            {$userinfo.gold}
+                             </empty>
+                            </em> </li>
+                            <li class="text-lesser">模拟金币</li>
+                        </ul>
+                        <else />
+                            <style>
+                                .detail .summary ul {
+                                    width: 100%;
+                                }
+                            </style>
+                        </if>
+                    </div>
+                    <div class="action clearfix" style="display:none">
+
+                        <div class="left">
+                            <a href="/login.html" class="button button-stress do-rechange">登录</a>
+                        </div>
+                        <div class="right">
+                            <a href="/register.html" class="button do-atm">免费注册</a>
+                        </div>
+
+                    </div>
+                    <div class="action clearfix clear" style="display: block;">
+
+                        <div class="left">
+                            <a href="{:U('account')}" class="button button-stress do-rechange">充值</a>
+                        </div>
+                        <div class="right">
+                            <a href="{:U('withdraw')}" class="button do-atm">提现</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+
+            <!-- 列表 -->
+
+            <ul class="mod-list mod-list-sample mine-mod-list" style="display: none;">
+
+                <li class="height">
+                    <a class="test" href="/news/Message.html">
+                        <span class="leftBg icon-xiaoxi1"></span>
+                        <span>消息中心</span>
+                        <span class="rightBg icon-jiantou"></span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="mod-list mod-list-sample mine-mod-list bottom1">
+                
+                <li class="height">
+                    <a class="goCash buttn test" href="{:U('User/capital')}" data-url="account/detail.html?type=1">
+                        <span class="leftBg icon-xianjin"></span>
+                        <span>资金明细</span>
+                        <span class="rightBg icon-jiantou"></span>
+                    </a>
+                </li>
+            </ul>
+    
+    
+    
+            <if condition="$trade eq 1">
+				<ul class="mod-list mod-list-sample mine-mod-list">
+
+	                <li class="height">
+	                    <a class="goCash buttn" href="{:U('User/simulation')}" data-url="account/detail.html?type=2">
+	                        <span class="leftBg icon-mingxi"></span>
+	                        <span>模拟明细</span>
+	                        <span class="rightBg icon-jiantou"></span>
+	                    </a>
+	                </li>
+            	</ul>
+ 			</if>
+ 
+            
+            <!-- 列表2 -->
+            <ul class="mod-list mod-list-sample mine-mod-list">
+                <li class="height">
+                    <a class="goDetail buttn" href="{:U('User/personal')}" data-href="mine/profile.html">
+                        <span class="leftBg icon-geren"></span>
+                         <span>个人信息</span>
+                        <span class="rightBg icon-jiantou"></span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="mod-list mod-list-sample mine-mod-list">
+                <li class="height">
+                <eq name="userinfo['code']" value="">
+                            <a class="goDetail buttn" id="extension">
+                    <else />
+                       <a class="goDetail buttn" href="{:U('User/extension')}">
+                    </eq>
+                        <span class="leftBg icon-xinshou"></span>
+                         <span>推广赚钱</span>
+                        <span class="rightBg icon-jiantou"></span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="mod-list mod-list-sample mine-mod-list last1">
+                <li class="height">
+                    <a class="goDetail buttn" href="{:U('Register/logout')}" data-href="mine/profile.html">
+                        <span class="leftBg icon-geren"></span>
+                         <span>退出登陆</span>
+                        <span class="rightBg icon-jiantou"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </section>
+
+
+    <!-- 底部 -->
+
+
+    <include file="Common:footer" />
+
+</div>
+
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>
+
+<script type="text/javascript">
+      
+     $("#extension").click(function(){
+
+         //询问框
+          layer.open({
+            content: '你确定要成为推广者吗'
+            ,btn: ['是的', '不要']
+            ,yes: function(index){
+                  // location.reload();
+                    $.ajax({
+                            url:"{:U('User/ExtensionIs')}",
+                            dataType: 'json',
+                            type: 'get',
+                            success:function(data){
+
+                                    if(data.code == 1){
+
+                                        window.location="{:U('User/extension')}";
+                 
+                                    } else{
+                                        
+                                        layer.open({
+                                            content: '失败了，请稍候再试'
+                                            ,skin: 'msg'
+                                            ,time: 2 
+                                          }); 
+                                    }
+
+                            }
+                    });
+            }
+          });
+            
+});
+
+</script>

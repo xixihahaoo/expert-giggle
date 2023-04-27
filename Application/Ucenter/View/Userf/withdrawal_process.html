@@ -1,0 +1,109 @@
+<include file="Common:layer_content_header" />
+
+<div class="page-content">
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <form class="form-horizontal" role="form" id="id_form">
+                <input type="hidden" name="bpid" value="{$vo['bpid']}">
+
+                <div class="space-4"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for=""> 申请用户：{$user['username']} </label>
+                    <div class="col-sm-9">
+                    </div>
+                </div>
+
+                <div class="space-4"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for=""> 申请金额：{$vo['bpprice']}元 </label>
+                    <div class="col-sm-9">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for=""> 申请操作</label>
+                    <div class="col-sm-9">
+                        <label class="col-sm-2">
+                            <input name="isverified" value="1" class="ace" type="radio">
+                            <span class="lbl"> 同意</span>
+                        </label>
+                        <label class="col-sm-3">
+                            <input name="isverified" value="0" class="ace" type="radio">
+                            <span class="lbl"> 拒绝</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for=""> 理由： </label>
+                    <div class="col-sm-9">
+                        <input type="text" id="id_option_" value="" name="remarks" placeholder="" class="col-xs-10 col-sm-5 " />
+                    </div>
+                </div>
+
+                <div class="hr hr-24"></div>
+
+
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9 center">
+                        <button class="btn btn-info" id="submit_btn" type="button">
+                            <i class="icon-ok bigger-110"></i>
+                            确定
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+<include file="Common:layer_content_footer" />
+
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function($) {
+        $('#submit_btn').bind('click', function(){
+            if($("input[name='isverified']:checked").size() <= 0){
+                alert('请选择申请操作');
+                return false;
+            }
+
+            $.ajax({
+                type: "post",
+                url: "{:U('userf/withdrawal_processing')}",
+                data:$("#id_form").serialize(),
+                dataType:'json',
+                success: function(data) {
+                    if(data.status == 1)
+                    {
+                        alert('操作成功');
+                        parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);
+                    }
+                    else
+                    {
+                        alert(data.msg);
+                    }
+
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            })
+        });
+    });
+
+
+</script>
+
+
+
+<script src="__PUBACE__/assets/js/ace-elements.min.js"></script>
+<script src="__PUBACE__/assets/js/ace.min.js"></script>

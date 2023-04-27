@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <include file="header" />
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/merge_product.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/index_merge.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/merge.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/wxcommon.css">
+    <link rel="stylesheet" href="__PUBLIC__/Home/css/index.css">
+      
+    
+
+    <style>
+        .news-nav i {font-size:15px;}
+        .page-footer .content .icon-zx {
+            color: #DA3333;
+        }
+
+        .page-footer .content .icon-home {
+            color: #B5B5B5;
+        }
+    </style>
+</head>
+
+<body class="page-news">
+
+
+
+<div class="body" style="min-height:5rem;">
+    <div class="timecon">
+        <ul class="livecon" style="margin-top: 80px;">
+      <volist name="a" id="vo">
+         <if condition="$vo['content'] neq '' ">
+            <li class="flash  newsline-2016-11-10" id="">
+               <a>
+                  <div class="timeline"> 
+                     <div class="dotbg">    
+                        <div class="dot"></div>
+                    </div>
+                    <div class="time time{$i}">{$vo.time}</div>
+                    </div>
+                    <div class="live-c onlytxt">
+                    <div class="txt txt{$i}"><b>{$vo.content}</b> </div>
+                    </div>
+                </a>
+        </li>
+         </if>
+
+        </volist>
+         </ul>
+    </div>
+
+    <div id="full-loading" class="loading loadgif hide">
+        <img class="loadin" src="__IMG__/loading1x.png">
+    </div>
+
+</div>
+
+</body>
+</html>

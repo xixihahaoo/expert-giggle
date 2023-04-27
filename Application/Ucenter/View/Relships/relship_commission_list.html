@@ -1,0 +1,270 @@
+<include file="Common:header_s" />
+<include file="Common:main_container_header_s" />
+<link rel="stylesheet" type="text/css" href="__CSS__/layerui/css/layui.css">
+<style type="text/css">
+.dataTables_length span{color: red;}
+td{text-align: center;}
+#id_search_area>div>div>div{height: 70px}
+</style>
+
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            推广管理
+            <small>
+                <i class="icon-double-angle-right"></i>
+                 佣金流水
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="table-header">
+                        佣金流水&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="table-responsive">
+                    <div role="grid" class="dataTables_wrapper" id="sample-table-2_wrapper">
+                        <form action="__URL__/relship_commission_list" method="get" id="form1">
+                            <div class="row" id="id_search_area">
+                                <div class="col-sm-9">
+                                <div style=" width: 1350px; height: 100px;">
+                                    <div class="col-sm-2">
+                                        <div class="dataTables_length" id="">
+                                            <label>
+                                                会员昵称
+                                                <select name="user" id="user" style="width: 120px;">
+                                                <option value="" class="selected">默认不选</option>
+                                                <volist name="user" id="vo">
+                                                    <option value="{$vo['uid']}">{$vo['username']}</option>
+                                                </volist>
+                                                </select>
+                                                <input type="hidden" value="{$userid}" id="userid">
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="dataTables_length" id="">
+                                            <label>
+                                                <input class="class_search_area input" placeholder="请输入手机号码" value="{$utel}" aria-controls="sample-table-2" name="utel" data-type="agent_name" type="text" style="height: 36px;">
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="dataTables_length" id="">
+                                            <label>
+                                                结算状态：
+                                                <select name="status"  style="width: 120px;">
+                                                <option value="" class="selected">默认不选</option>
+                                                   <if condition="$status eq 1">
+                                                    <option value="1" selected>已结算</option>
+                                                    <else />
+                                                     <option value="1">已结算</option>
+                                                    </if>
+                                                    <if condition="$status eq 2">
+                                                    <option value="2" selected>未结算</option>
+                                                    <else />
+                                                    <option value="2">未结算</option>
+                                                    </if>
+                                                </select>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                    <!-- <label>开始时间:</label> -->
+                                    <if condition="$time">
+                                   <input class="layui-input input" style="width: 200px;" placeholder="开始时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" value="{$time['start_time']}" name="start_time">
+                                   <else />
+                                    <input class="layui-input input" style="width: 200px;" placeholder="开始时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" value="" name="start_time">
+                                   </if>
+                                </div>
+
+                                <div class="col-sm-2">
+                                 <!--    <label>结束时间:</label> -->
+                                 <if condition="$time">
+                                   <input class="layui-input input" style="width: 200px;" placeholder="结束时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" value="{$time['end_time']}" name="end_time">
+                                <else />
+                                    <input class="layui-input input" style="width: 200px;" placeholder="结束时间" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" value="" name="end_time">
+                                </if>
+                                </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="hr hr-24"></div>
+                                <div class="col-sm-12">
+                                    <div class="dataTables_length" id="sample-table-2_length1">
+                                        <label>
+                                            <input type="button"  onclick="sub()" value="点击查询" class="btn btn-xs btn-info">
+                                        </label>&nbsp;&nbsp;
+                                        <label>
+                                            <input type="button" onclick="daochu()" value="查找导出" class="btn btn-xs btn-info">
+                                        </label>&nbsp;&nbsp;
+                                        <label>
+                                            <input type="button" id="id_reset" value="清空数据" class="btn btn-xs btn-info">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        <div role="grid" class="dataTables_wrapper" id="sample-table-2_wrapper">
+                            <table id="sample-table-2" class="table table-striped table-bordered table-hover dataTable">
+                                <thead>
+                                <tr>
+                                    <th class="center">订单编号</th>
+                                    <th class="center">推广员用户昵称</th>
+                                    <th class="center">手机号码</th>
+                                    <th class="center">用户类型</th>
+                                    <th class="center">推广员获得佣金(&yen;)</th>
+                                    <th class="center">交易手续费(&yen;)</th>
+                                    <th class="center">交易用户</th>
+                                    <th class="center">结算状态</th>
+                                    <th class="center">流水时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="feeRs" id="v">
+                                    <tr>
+                                        <td class="center">{$v.order_id}</td>
+                                        <td class=""><a target="_blank" style="color: #307ECC" href="{:U('users/user_detail')}?user_id={$v.user_id}">
+                                        {:getUsername($v['user_id'])}
+                                        </a></td>
+                                        <td>{$v.utel}</td>
+                                        <td>
+                                        <if condition="$v['otype'] eq 4">
+                                        <span class="label label-sm label-warning">普通会员</span>
+                                        <else />
+                                        <span class="label label-sm label-success">运营中心</span>
+                                        </if>
+                                        </td>
+                                        <td>{$v.profit_rmb}</td>
+                                        <td>{$v.fee_rmb}</td>
+                                        <td class=""><a target="_blank" style="color: #307ECC" href="{:U('users/user_detail')}?user_id={$v.purchaser_id}">{:getUsername($v['purchaser_id'])}</a></td>
+                                        <td>{$v.status_n}</td>
+                                        <td>{$v.date_c}</td>
+                                    </tr>
+                                </volist>
+
+
+
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="dataTables_info" id="sample-table-2_info">共<b class="orange">{$totalCount}</b>，当前显示第 <b class="orange">{$nowStart}</b>到<b class="orange">{$nowEnd}</b></div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="dataTables_paginate paging_bootstrap">
+                                        <ul class="pagination">
+                                            {$pageShow}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="dataTables_length" id="" style="width: 265px;">
+                                    <label>
+<!--                                                 <span>总手续费:
+                                                <if condition="$account['currency_rmb'] eq '' ">
+                                                    0元
+                                                    <else />
+                                                    {$account.currency_rmb}元
+                                                </if>
+                                                </span></br> -->
+                                               <span>总佣金:
+                                                <if condition="$account['profit_rmb'] eq '' ">
+                                                    0元
+                                                    <else />
+                                                    {$account.profit_rmb}元
+                                                </if>
+                                                 </span></br>
+                                                <span>已结算:
+                                                <if condition="$account['count'] eq '' ">
+                                                    0个
+                                                    <else />
+                                                    {$account.count}个
+                                                </if>
+                                                </span></br>
+                                                <span>未结算:
+                                                <if condition="$account['count_stop'] eq '' ">
+                                                    0个
+                                                    <else />
+                                                    {$account.count_stop}个
+                                                </if>
+                                                </span></br>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end id sample-table-2_wrapper-->
+                    </div>
+                    <!-- end table-responsive -->
+                </div>
+            </div>
+
+
+            <div class="space-20"></div>
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+
+<include file="Common:main_container_footer" />
+<include file="Common:footer_basic_base" />
+
+
+<script src="__PUBACE__/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.slimscroll.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.easy-pie-chart.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.sparkline.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.pie.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.resize.min.js"></script>
+<script type="text/javascript" src="__CSS__/layerui/layui.js"></script>
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+jQuery(function($) {
+
+var userid = $("#userid").val();
+$("#user option").each(function(){
+    if(userid == $(this).val()){
+        $(this).attr('selected',true);
+    }
+});
+
+$("#id_reset").click(function(){
+    
+     $('.input').val("");
+     $('.selected').attr('selected',true);
+});
+
+//日期选择时间
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+});
+});
+
+function sub() {
+    $('#form1').attr("action","__URL__/relship_commission_list");
+    $('#form1').submit();
+}
+
+function daochu() {
+    $('#form1').attr("action","__URL__/commission_daochu");
+    $('#form1').submit();
+}
+</script>
+
+<include file="Common:footer_ace_base" />
+<include file="Common:footer" />

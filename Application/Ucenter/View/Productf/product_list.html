@@ -1,0 +1,188 @@
+<include file="Common:header_f" />
+<include file="Common:main_container_header_f" />
+
+
+<div class="page-content">
+    <div class="page-header">
+        <h1>
+            商品
+            <small>
+                <i class="icon-double-angle-right"></i>
+                商品列表
+            </small>
+        </h1>
+    </div><!-- /.page-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- PAGE CONTENT BEGINS -->
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="table-header">
+                        商品列表
+                    </div>
+                    <div class="table-responsive">
+                        <div role="grid" class="dataTables_wrapper" id="sample-table-2_wrapper">
+                        <table id="sample-table-1" class="table table-striped table-bordered table-hover dataTable">
+                            <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>类型</th>
+                                <th class="hidden-480">交易所</th>
+                                <th class="hidden-480">商品简介</th>
+                                <th>代理商成本价</th>
+                                <th>渠道佣金</th>
+                                <th>状态</th>
+                                <th>标签</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <volist name="optionRs" id="v">
+                            <tr>
+                                <td class="">
+                                    {$v.capital_name}
+                                </td>
+                                <td>
+                                    {$v.capital_key}
+                                </td>
+                                <td>{$v.capital_type}</td>
+                                <td>{$v.option_n}</td>
+                                <td class="hidden-480">{$v.c_currency}{$v.chengbenjia}&nbsp;(&yen;&nbsp;{$v.chengbenjia1})</td>
+                                <td class="hidden-480">{$v.commission1}</td>
+                                <td>{$v.status_n}</td>
+                                <td class="hidden-480">
+                                    {$optionSpecialRs[$v['id']]['type_name']}
+                                </td>
+                                <td>
+                                    <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+                                        <a href="#" data-id="{$v['id']}" class="class_edit">修改</a>
+                                        <a href="#" data-id="{$v['id']}" data-status="{$v['status_s']}" class="class_opt_status">
+                                            {$v.status_o}
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            </volist>
+                            </tbody>
+                        </table>
+
+                        </div>
+                        <!--end id sample-table-2_wrapper-->
+                    </div><!-- /.table-responsive -->
+                </div><!-- /span -->
+            </div><!-- /row -->
+
+            <div class="hr hr-18 dotted hr-double"></div>
+
+            <!-- PAGE CONTENT ENDS -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.page-content -->
+
+
+
+<include file="Common:main_container_footer" />
+<include file="Common:footer_basic_base" />
+
+<script type="text/javascript" src="__PUBJS__/layer/layer.js"></script>
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+
+<!-- page specific plugin scripts -->
+
+<!--[if lte IE 8]>
+<script src="__PUBACE__/assets/js/excanvas.min.js"></script>
+<![endif]-->
+
+<script src="__PUBACE__/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.slimscroll.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.easy-pie-chart.min.js"></script>
+<script src="__PUBACE__/assets/js/jquery.sparkline.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.pie.min.js"></script>
+<script src="__PUBACE__/assets/js/flot/jquery.flot.resize.min.js"></script>
+
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function($) {
+
+    });
+
+    $('.class_edit').click(function(){
+
+        layer.open({
+            type: 2,
+            area: ['780px', '530px'],
+            fixed: true, //不固定
+            maxmin: true,
+            title: "修改商品信息",
+            content: ["{:U('productf/edit_special_info')}?option_id="+$(this).attr('data-id'), 'no'],
+            end: function () {
+                top.location.reload();
+            }
+
+        });
+
+    });
+
+    $('.class_opt_status').click(function(){
+
+        var option_id   = $(this).attr('data-id');
+        var option_special_status   = $(this).attr('data-status');
+
+        layer.confirm('确认更改可售状态吗？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "post",
+                url: "{:U('productf/opt_edit_special_status')}",
+                data:{'option_id' : option_id, 'option_special_status' : option_special_status},
+                success: function(data) {
+                    //console.log(data.status);
+                    if(data.status == 1)
+                    {
+                        layer.open({
+                            content: data.ret_msg,
+                            btn: '确定',
+                            yes: function(index, layero){
+                                layer.close(index);
+                                top.location.reload();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        layer.open({
+                            content: data.ret_msg,
+                            btn: '确定',
+                            yes: function(index, layero){
+                                layer.close(index);
+                                top.location.reload();
+                            }
+                        });
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+
+        }, function(){
+
+        });
+
+    });
+
+
+</script>
+
+<include file="Common:footer_ace_base" />
+<include file="Common:footer" />

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html style="display: block;"><head>
+    <title>{:config('s_domain_name')}{:config('webname')}</title>
+     <include file="Common:header" />
+    <link rel="stylesheet" href="__CSS__/merge_product.css">
+    <script typet="text/javascript" src="__JS__/1.9.1jq/jquery.min.js"></script>
+    <link rel="stylesheet" href="__CSS__/layerui/css/layui.css"  media="all">
+</head>
+<body>
+    
+
+<div id="doc" class="doc">
+
+
+      <!-- panel: 结算 -->
+     <div class="page page-settle" style="display: block;">
+        <!-- 头部 -->
+        <header class="page-header page-header-score" style="background: #941E22">
+            <div class="content">
+                <h3>结算</h3>
+                <div class="left">
+
+                   <eq name="data[type]" value="1">
+                        <a href="{:U('Index/product',array('id' => $option[id]))}" class="iconfont go-back icon-xiangzuojiantou"></a>
+                 <else />
+                        <a href="{:U('Simulation/product',array('id' => $option[id]))}" class="iconfont go-back icon-xiangzuojiantou"></a>
+                </eq>
+                </div>
+                <div class="right"></div>
+            </div>
+        </header>
+         <!-- panel: 结算 -->
+    <if condition="$order neq '' ">
+        <article class="settle">
+            <div class="lists" id="list">
+            <volist name="order" id="vo">
+                <ul class="mod-list mod-list-std" data-index="0">
+                    <li class="clearfix">
+                        <div class="title">
+                            <if condition="$vo['ostyle'] eq 0">
+                                <h3 class="text-highs" style="color: {$vo.color}">买涨{$vo.onumber}手<span> ({$option.capital_name})</span></h3>
+                             <else />
+                                <h3 class="text-lows" style="color: {$vo.color}">买跌{$vo.onumber}手<span> ({$option.capital_name})</span></h3>
+                             </if>
+                            <h3 class="income text-highs text-right">
+                             <if condition="$vo['ploss'] lt 0">
+                              <font style="color: {$vo.color}">{$vo.ploss}({$vo.RMB}元)</font>
+                            <else />
+                               <font style="color: {$vo.color}"> +{$vo.ploss}(+{$vo.RMB}元)</font>
+                            </if>
+                            </h3>    
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="left">
+                        <p class="text-lesser">
+                            <span>止盈 {$vo.endprofit}</span> 
+                            <span>买入 {$vo.buyprice}</span>
+                        </p>
+                        <p class="text-lesser">
+                            <span>止损 {$vo.endloss}</span>
+                            <span>平仓 <em>{$vo.sellprice}</em></span>
+                        </p>
+                        <p class="text-lesser">买入时间：{$vo.buytime|date='Y-m-d H:i:s',###}</p>
+                        
+                        <p class="text-lesser">平仓时间：{$vo.selltime|date='Y-m-d H:i:s',###}</p>
+                        </div>
+                        <div class="right">
+                           <div class="status normal"><span>结算成功</span></div>
+                        </div>
+                    </li>
+                    <li class="action hide">
+                         <span class="text-lesser">{$tradeMsg}</span>
+                    </li>
+                </ul>
+            </volist>
+            </div>
+         <div id="LAY_demo1"></div>
+        </article>
+   <else />
+   <div class="lists">
+          <div class="" style="margin-top: 0.8rem;text-align: center;">暂无交易</div>
+   </div>
+
+  </if>
+</div>
+</body>
+</html>
+
+<script src="__CSS__/layerui/layui.js" charset="utf-8"></script>
+<script>
+layui.use('flow', function(){
+  var flow = layui.flow;
+ 
+  flow.load({
+    elem: '#LAY_demo1' //流加载容器
+    ,scrollElem: '' //滚动条所在元素，一般不用填，此处只是演示需要。
+    ,done: function(page, next){ //执行下一页的回调
+
+      //模拟数据插入
+      setTimeout(function(){
+        var lis = [];
+        
+          $.ajax({
+                url: "{:U('settlement_new')}",
+                dataType: 'json',
+                type: 'get',
+                data:"page="+((page-1)*10)+"&pid={$data.pid}&type={$data.type}",
+                success: function (data) {       
+                        var html = '';
+                        $.each(data,function(key,val){
+     
+                            html += '<ul class="mod-list mod-list-std" data-index="0">';
+                            html += '<li class="clearfix">';
+                            html += ' <div class="title">';
+                            if(val.ostyle == 0)
+                            {
+                            html += '<h3 class="text-highs" style="color:'+val.color+'">买涨'+val.onumber+'手<span> ({$option.capital_name})</span></h3>';
+                            } else 
+                            {
+                            html += '<h3 class="text-highs" style="color:'+val.color+'">买跌'+val.onumber+'手<span> ({$option.capital_name})</span></h3>';
+                            }
+                            html += '<h3 class="income text-highs text-right">';
+                            if(val.ploss < 0){
+                             html += '<font style="color:'+val.color+'">'+val.ploss+'('+val.RMB+'元)</font>';
+                            } else 
+                            {
+                             html += '<font style="color:'+val.color+'">+'+val.ploss+'(+'+val.RMB+'元)</font>';
+                            }
+                            html += '</h3>';
+                            html += '</div>';
+                            html += ' </li>';
+                            html += '<li class="clearfix">';
+                            html += '<div class="left">';
+                            html += '<p class="text-lesser">';
+                            html += '<span>止盈'+val.endprofit+'</span> ';
+                            html += '<span>买入'+val.buyprice+'</span>';
+                            html += '</p>';
+                            html += '<p class="text-lesser">';
+                            html += '<span>止损 '+val.endloss+'</span>';
+                            html += '<span>平仓 <em>'+val.sellprice+'</em></span>';
+                            html += '</p>';
+                            html += '<p class="text-lesser">买入时间：'+val.buytime+'</p>';
+                            html += '<p class="text-lesser">平仓时间：'+val.selltime+'</p>';
+                            html += '</div>';
+                            html += '<div class="right">';
+                            html += '<div class="status normal"><span>结算成功</span></div>';
+                            html += '</div>';
+                            html += '</li>';
+                            html += '<li class="action hide">';
+                            html += '<span class="text-lesser">{$tradeMsg}</span>';
+                            html += '</li>';
+                            html += '</ul>';
+
+                    });
+                    $("#list").append(html);
+                }
+            });
+        next(lis.join(''), page < "{$data.count}");
+      }, 1000);
+    }
+  });
+});
+</script>

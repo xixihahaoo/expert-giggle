@@ -1,0 +1,3 @@
+<?php
+//000000000000a:4:{s:20:"SYSTEM_CURRENCY_TYPE";a:6:{s:3:"CNY";a:3:{s:4:"name";s:9:"人民币";s:4:"code";s:3:"CNY";s:4:"rate";s:6:"1.0000";}s:3:"HKD";a:3:{s:4:"name";s:6:"港元";s:4:"code";s:3:"HKD";s:4:"rate";s:3:"0.9";}s:3:"USD";a:3:{s:4:"name";s:6:"美元";s:4:"code";s:3:"USD";s:4:"rate";s:1:"7";}s:3:"EUR";a:3:{s:4:"name";s:6:"欧元";s:4:"code";s:3:"EUR";s:4:"rate";s:3:"7.5";}s:3:"GBP";a:3:{s:4:"name";s:6:"英镑";s:4:"code";s:3:"GBP";s:4:"rate";s:7:"10.0000";}s:3:"DEM";a:3:{s:4:"name";s:6:"马克";s:4:"code";s:3:"DEM";s:4:"rate";s:6:"1.0000";}}s:20:"SYSTEM_OPTION_NUMBER";a:1:{s:8:"sys_date";s:5:"30|10";}s:23:"SYSTEM_OPTION_SELL_TIME";a:0:{}s:18:"SYSTEM_OPTION_TIME";a:1:{s:8:"sys_date";s:1:"5";}}
+?>

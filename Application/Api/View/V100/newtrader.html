@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)http://zhongying.gwecaopan.com/newtrader.html -->
+<html>
+<head>
+<include file="header" />
+        <link rel="stylesheet" href="__PUBLIC__/Home/css/rule.css">
+    <style>
+        section{
+            width: 100%;
+        }
+        span{
+            display: block;
+            width: 100%;
+        }
+        span img{
+            width: 100%;
+        }
+    </style>
+</head>
+  
+  <body>
+
+    <div class="doc page-home" id="doc" style="width: 100%;background: #000;margin-top: 25px">
+    <section>
+<!--         <video width="100%" controls="controls" poster="http://www.jnhyxx.com/v2/banner/imgs/newtrader.png">  
+            <source src="http://www.jnhyxx.com/v2/new.mp4" type="video/mp4">  
+        </video>  -->
+    </section>
+        <section>
+            <empty name="data['news']">
+                <p>暂无</p>
+                <else />
+                {$data.news}
+            </empty>
+
+        </section>
+    </div>
+
+  
+</body></html>
