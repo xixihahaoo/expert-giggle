@@ -11,17 +11,23 @@
 >
 > 项目数据库配置信息在 Application/Common/config.php中
 >
-> 系统设有3个后台，分别为：总后台 ->> 运营中心 -> 销售商
+> 系统设有4个后台，分别为：总后台 -> 运营分部 -> 运营中心 -> 代理
 > 
-> 登录账户： 后台地址：http://域名/login
+> 每个运营中心需要配置单独的二级域名，比如主域名为 test.com、二级域名为a.test.com、b.test.com等。在域名服务商处，将域名设置为泛解析，解析到服务器ip即可，nginx设置为 *.test.com
 > 
-> 总后台账户：admin/123456 
+> 运营商二级域名支持后台配置，在总后台运营中心管理模块，配置即可
 >
-> 运营中心：yunyingzhongxin/123456 
+> 登录账户： 后台地址：http://域名/admin
 > 
-> 代理商：xiaoshoushang/123456 
+> 总后台账户：admin/123456
+>
+> 运营分部：tebieyunying/123456
 > 
-> 手机端普通用户账户：123456@qq.com/123456
+> 运营中心：yunyingzhongxin/123456
+> 
+> 代理商：jingjiren/123456
+>
+> 手机端普通用户账户：123456/123456
 
 
 ## 以下共3个地方需要启动相关计划脚本
@@ -63,10 +69,11 @@
 
 ## 宝塔Supervisor管理器
 
-> 跟随脚本：/www/server/php/56/bin/php cli.php Home/CrontabFollow/settlement
-> 点位平仓脚本：/www/server/php/56/bin/php cli.php Home/CrontabPosition/settlement
-> 时间平仓脚本：/www/server/php/56/bin/php cli.php Home/CrontabTimePosition/settlement
-> 挂单脚本：/www/server/php/56/bin/php cli.php Home/CrontabResting/settlement
+> 自动平仓脚本：/www/server/php/56/bin/php auto.php
+> 
+> auto.php在你的项目根目录下，需要更改文件的数据库连接信息
+> 
+> > ![img.png](mdPng/img_7.png)
 >
 > ![img.png](mdPng/img_4.png)
 > ![img.png](mdPng/img_5.png)
