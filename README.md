@@ -69,7 +69,7 @@
 
 ## 宝塔Supervisor管理器
 
-> 自动平仓脚本：/www/server/php/56/bin/php auto.php
+> 自动平仓脚本命令：/www/server/php/56/bin/php auto.php
 > 
 > auto.php在你的项目根目录下，需要更改文件的数据库连接信息
 > 
