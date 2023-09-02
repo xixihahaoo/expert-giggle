@@ -32,6 +32,8 @@
 
 ## 以下共3个地方需要启动相关计划脚本
 
+## 1：数据源对接：
+
 > **数据源使用地址（备注）：http://39.107.99.235:1008/market/market.php**
 >
 > 行情接收启动命令： 启动前请确定ip已授权，行情对接完成
@@ -52,7 +54,7 @@
 > ![img.png](mdPng/img_1.png)
 
 
-## 宝塔计划任务：
+## 2：宝塔计划任务：
 
 > 1：每隔5分钟定时更新休市状态 	脚本内容：
 >     sh /www/wwwroot/www.28hxyct.xyz/job.sh 	www.28hxyct.xyz 换成你的项目实际目录 	job.sh在你的项目根目录下，如果需要更换新的项目需要进入修改该文件。
@@ -67,7 +69,7 @@
 
 
 
-## 宝塔Supervisor管理器
+## 3：宝塔Supervisor管理器
 
 > 自动平仓脚本命令：/www/server/php/56/bin/php auto.php
 > 
