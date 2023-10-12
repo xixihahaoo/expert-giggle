@@ -40,6 +40,7 @@
 >
 > 启动前需要修改：Events.php 将数据库信息改为自己的
 > ![img.png](mdPng/img.png)
+> ![img.png](mdPng/4.png)
 >
 > 启动命令： /www/server/php/56/bin/php
 > /www/wwwroot/www.28hxyct.xyz/Workerman/GatewayWorker/start.php restart
